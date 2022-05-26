@@ -1,0 +1,39 @@
+{
+  "name": "composer",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 5050",
+    "test": "vitest",
+    "test:unit": "vitest",
+    "test:component": "cypress open-ct",
+    "test:e2e": "cypress open",
+    "coverage": "vitest --coverage"
+  },
+  "dependencies": {
+    "@vue/composition-api": "^1.4.6",
+    "docs-soap": "^1.2.1",
+    "quill": "^2.0.0-dev.4",
+    "quill-autoformat": "^0.1.2",
+    "sortablejs": "^1.15.0",
+    "vue": "^2.6.14"
+  },
+  "devDependencies": {
+    "@cypress/vite-dev-server": "^2.2.3",
+    "@cypress/vue": "^3.1.2",
+    "@testing-library/cypress": "^8.0.2",
+    "@vitejs/plugin-legacy": "^1.7.1",
+    "@vue/runtime-dom": "^3.2.31",
+    "autoprefixer": "^10.4.7",
+    "cypress": "^9.7.0",
+    "postcss": "^8.4.14",
+    "sass": "^1.52.1",
+    "tailwindcss": "^3.0.24",
+    "unplugin-vue2-script-setup": "^0.9.3",
+    "vite": "^2.8.4",
+    "vite-plugin-vue2": "^1.9.3",
+    "vue-template-babel-compiler": "^1.2.0",
+    "vue-template-compiler": "^2.6.14"
+  }
+}
