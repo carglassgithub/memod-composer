@@ -5,39 +5,40 @@
 @font-face {
   /* Light */
   font-family: "Gibson";
-  src: url("../fonts/gibson-.otf");
+  src: url("./fonts/3FIRx5i8K.otf");
   font-weight: lighter;
 }
 @font-face {
   /* Regular */
   font-family: "Gibson";
-  src: url("./fonts/gibson-regular.otf");
+  src: url("./fonts/7KHWmMg4.otf");
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   /* Semibold */
   font-family: "Gibson";
-  src: url("../fonts/0RoL04Fvg.otf");
+  src: url("./fonts/0RoL04Fvg.otf");
   font-weight: 800;
 }
 @font-face {
   /* Italic */
   font-family: "Gibson";
-  src: url("../fonts/ofITWFYHz.otf");
+  src: url("./fonts/ofITWFYHz.otf");
   font-style: italic;
 }
+
 @font-face {
   /* Semibold */
   font-family: "ZillaSlab";
-  src: url("../fonts/QWjFV7qw.ttf");
+  src: url("./fonts/QWjFV7qw.ttf");
   font-weight: 800;
   font-style: normal;
 }
 @font-face {
   /* Semibold */
   font-family: "ZillaSlab";
-  src: url("../fonts/0A33HmL.ttf");
+  src: url("./fonts/0A33HmL.ttf");
   font-style: normal;
 }
 
