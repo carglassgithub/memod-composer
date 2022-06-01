@@ -22,7 +22,7 @@
         @removed="handleRemove"
         @selection-updated="handleSelectionUpdated"
         @blur="handleBlur"
-        @focus="handleFocus"
+        @focus="focusBullet(bullet.id)"
       />
     </div>
     <button class="mt-3 add-bullet-btn" type="button" @click="addBullet({}, true)">
@@ -202,16 +202,6 @@ const handleBlur = (bulletId) => {
     bullet.focus = false;
     state.currentElement = null;
     emitBulletOnBlur();
-  }
-};
-
-const handleFocus = (bulletId) => {
-  const bullet = bullets.value.find((item) => item.id === bulletId);
-  if (bullet) {
-    removeOtherFocused(bulletId);
-    bullet.focus = true;
-    state.currentElement = bullet.editor;
-    emitBulletOnFocus(bullet.editorId);
   }
 };
 
