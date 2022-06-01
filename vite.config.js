@@ -6,7 +6,7 @@ import { createVuePlugin as vue2 } from 'vite-plugin-vue2'
 // @ts-ignore
 import vueTemplateBabelCompiler from 'vue-template-babel-compiler'
 import scriptSetup from 'unplugin-vue2-script-setup/vite'
-import eslintPlugin from 'vite-plugin-eslint'
+// import eslintPlugin from 'vite-plugin-eslint'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -22,7 +22,7 @@ export default defineConfig({
       targets: ['ie >= 11'],
       additionalLegacyPolyfills: ['regenerator-runtime/runtime']
     }),
-    eslintPlugin()
+    // eslintPlugin()
   ],
   resolve: {
     alias: {
