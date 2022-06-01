@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueCompositionAPI, { createApp, h } from '@vue/composition-api'
 import App from './App.vue'
-import "./assets/base.css";
-import "quill/dist/quill.bubble.css"
-import "quill/dist/quill.core.css"
+import './assets/base.css'
+import 'quill/dist/quill.bubble.css'
+import 'quill/dist/quill.core.css'
 
 Vue.use(VueCompositionAPI)
 

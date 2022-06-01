@@ -1,21 +1,20 @@
-import Quill  from "quill";
+import Quill from 'quill'
 
-const BubbleTheme = Quill.import('themes/bubble');
+const BubbleTheme = Quill.import('themes/bubble')
 
 class ExtendBubbleTheme extends BubbleTheme {
   constructor(quill, options) {
-    super(quill, options);
+    super(quill, options)
 
     quill.root.addEventListener('click', (e) => {
-
-        this.setAnchorIcon()
-        quill.theme.tooltip.show();
-    });
+      this.setAnchorIcon()
+      quill.theme.tooltip.show()
+    })
   }
 
-    setAnchorIcon() {
-        this.quill.theme.tooltip.root.querySelector('.ql-mention').innerHTML = '@';
-    }
+  setAnchorIcon() {
+    this.quill.theme.tooltip.root.querySelector('.ql-mention').innerHTML = '@'
+  }
 }
 
-Quill.register('themes/bubble', ExtendBubbleTheme);
+Quill.register('themes/bubble', ExtendBubbleTheme)

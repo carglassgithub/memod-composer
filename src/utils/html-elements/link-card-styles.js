@@ -141,4 +141,4 @@ const EDITOR_LINK_STYLES = `
   background-position: center;
   cursor: pointer;
 }
-`;
+`
