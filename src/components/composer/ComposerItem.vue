@@ -1,6 +1,7 @@
 <template>
   <div
     class="relative composer-item"
+    data-testid="composer-item"
     :id="`editor_${bullet.id}`"
     :new-content="bullet.id ? 'true' : 'false'"
   >
@@ -23,11 +24,14 @@
         <div class="bullet-char-counter">0/ {{ CHAR_LIMIT }}</div>
       </div>
     </div>
-    <IconClose
+    <div 
       v-if="bullet.focus && showRemove"
       class="remove-bullet"
+      data-testid="btn-remove-bullet"
       @click.prevent.stop="$emit('removed', bullet.id)"
-    />
+    >
+      <IconClose />
+    </div>
   </div>
 </template>
 
@@ -103,6 +107,7 @@ onMounted(() => {
     if ([" ", "\n"].includes(char)) {
       checkLinkText(state.editor, delta);
     }
+    emitTextChanges()
   });
 
   state.editor.root.addEventListener("blur", () => {
@@ -113,6 +118,16 @@ onMounted(() => {
   // eslint-disable-next-line vue/no-mutating-props
   props.bullet.editor = state.editor;
 });
+
+const emitTextChanges = () => {
+  state.text = state.editor.getText();
+  state.html = state.editor.root.innerHTML;
+  emit("text-changed", {
+    text: state.text,
+    html: state.html,
+    id: props.bullet.id,
+  });
+};
 
 onBeforeUnmount(() => {
   toRaw(state.editor).off("text-change");
@@ -211,11 +226,11 @@ function updateLink(editor, index, value) {
 </script>
 
 <style lang="scss">
-input, div, .ql-editor, .ql-editor.ql-blank::before {
-    color: white !important;
+  .ql-editor.ql-blank::before {
+    color: rgba(235, 235, 245, 0.3) !important;
 
     &::placeholder {
-        color: white !important;
+      color: rgba(235, 235, 245, 0.3) !important;
     }
 }
 </style>
