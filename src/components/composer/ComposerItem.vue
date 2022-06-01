@@ -39,10 +39,11 @@
 import Quill from "quill";
 import "../../utils/base"
 import "../../utils/modules/hyperlink";
-import { onBeforeUnmount, onMounted, reactive, ref, toRaw } from "@vue/composition-api";
+import { inject, nextTick, onBeforeUnmount, onMounted, reactive, ref, toRaw } from "@vue/composition-api";
 import { composerConstants, getLastInsertedChar } from "../../utils/index";
 import IconClose from "../icons/IconClose.vue";
 import IconOrder from "../icons/IconOrder.vue";
+import { emitCurrentSelectionAndFormat } from "../../utils/emitters";
 
 // import { insertEmbed } from "../../utils/embeds";
 
@@ -85,7 +86,10 @@ const editorRef = ref();
 const state = reactive({
   CHAR_LIMIT: 140,
   editor: null,
+  currentSelection: null,
 });
+
+const eventHub = inject("eventHub", { on: () => {}, emit: () => {} });
 
 onMounted(() => {
   state.editor = new Quill(editorRef.value, {
@@ -96,7 +100,7 @@ onMounted(() => {
     placeholder: props.placeholder,
   });
 
-  state.editor.on("selection-change", (range) => {
+  state.editor.on(Quill.events.SELECTION_CHANGE, (range) => {
     if (range) {
       emit("focus", props.bullet.id);
     }
@@ -108,6 +112,10 @@ onMounted(() => {
       checkLinkText(state.editor, delta);
     }
     emitTextChanges()
+    nextTick(() => {
+      state.currentSelection = state.editor.getSelection();
+      emitCurrentSelectionAndFormat(state.currentSelection);
+    })
   });
 
   state.editor.root.addEventListener("blur", () => {
@@ -117,6 +125,10 @@ onMounted(() => {
 
   // eslint-disable-next-line vue/no-mutating-props
   props.bullet.editor = state.editor;
+
+  eventHub.on(`bullet:${props.bullet.id}`, (actionName, params) => {
+    execAction(actionName, params);
+  })
 });
 
 const emitTextChanges = () => {
@@ -223,6 +235,23 @@ function updateLink(editor, index, value) {
   const urlValue = value.includes("http") ? value : `https://${value}`;
   editor.insertEmbed(index, "custom-hyperlink", urlValue, "silent");
 }
+
+const actions = {
+  insertText(text) {
+    state.editor.insertText(state.currentSelection || 0 , text);
+  }
+}
+
+const execAction = ({ name: actionName, params }) => {
+  const action = actions[actionName]
+  if (action) {
+    action(params);
+  }
+}
+
+defineExpose({
+  ...actions,
+})
 </script>
 
 <style lang="scss">
