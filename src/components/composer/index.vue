@@ -239,6 +239,8 @@ const insertText = (text) =>  {
   bulletAction(lastBullet.id, 'insertText', text);
 };
 
+// execAction('insertText', param)
+
 const formatSelection = (format) => {
   if (args.format === "code") {
     quoteBullet();
@@ -252,8 +254,8 @@ const setBulletDisplayType = (type) => {
 }
 
 const insertImages = (images) => {
-  // @todo: handle insert images
-  //   insertImage(args.images);
+  const lastBullet = focusLastBullet();
+  bulletAction(lastBullet.id, 'insertImages', images);
 };
 
 const insertLink = (url) => {
@@ -265,6 +267,7 @@ const insertMention = (username) => {
   // @handle insert mention
   // this.insertMentionOrHashtag(args, 'mention');
 }
+
 const insertHashtag = (tag) => {
   // @handle insert hashtag
   // this.insertMentionOrHashtag(args, 'hashtag');

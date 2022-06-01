@@ -10,6 +10,27 @@ describe('Composer inserts', () => {
             }
         })
 
+        wrapper.insertText('Hello World')
         expect(screen.getByText('Hello world')).toBeTruthy();
+    })
+    it('should insert image', () => {
+        const bullets = []
+        const wrapper = render(MemoComposer, {
+            propsData: {
+                value: bullets
+            }
+        })
+        
+        const file = {
+            url: '',
+            attributes: {
+              width: '',
+              height: '',
+              orientation: 'portrait'
+            }
+        }
+        
+        wrapper.insertImages([file])
+        expect(screen.getByRole('image')).toBeTruthy();
     })
 })

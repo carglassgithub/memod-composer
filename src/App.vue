@@ -1,18 +1,33 @@
 <script setup>
 import { ref } from "@vue/composition-api";
-import Composer from "./components/composer/index.vue";
+import MemodComposer from "./components/composer/index.vue";
 
 const bullets = ref([]);
 const memodComposer = ref(false);
 
 const testAction = async () => {
-  memodComposer.value.insertText('hello world')
+  const file = {
+      id: 11934,
+      url: "https://memod-public.s3.us-east-1.amazonaws.com/images/bFhsnH.jpg",
+      attributes: {
+        width: '611',
+        height: '611',
+        unique_name: 'images/BUUwIk.jpg',
+        orientation: 'landscape'
+      }
+  }
+        
+  memodComposer.value.insertImages([file])
 };
 </script>
 
 <template>
   <main>
-    <Composer v-model="bullets" ref="memodComposer" />
+    <MemodComposer 
+      v-model="bullets" 
+      ref="memodComposer" 
+      @bulled-changed="handleBulletChange"
+    />
 
     <button @click="testAction">Test action</button>
   </main>

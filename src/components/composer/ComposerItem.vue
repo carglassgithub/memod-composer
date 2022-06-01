@@ -44,6 +44,7 @@ import { composerConstants, getLastInsertedChar } from "../../utils/index";
 import IconClose from "../icons/IconClose.vue";
 import IconOrder from "../icons/IconOrder.vue";
 import { emitCurrentSelectionAndFormat } from "../../utils/emitters";
+import { resizerConfig } from "../../config/resizer";
 
 // import { insertEmbed } from "../../utils/embeds";
 
@@ -239,6 +240,25 @@ function updateLink(editor, index, value) {
 const actions = {
   insertText(text) {
     state.editor.insertText(state.currentSelection || 0 , text);
+  },
+  insertImages(images) {
+    if (Array.isArray(images)) {
+     
+      const { endpoint, fit, height, width } = resizerConfig;
+        images.forEach((image) => {
+          const { url, attributes } = image;
+          const currentSelectionIndex = state.currentSelection ? state.currentSelection.index : 0;
+          const imageWidth = attributes.width || width;
+          const imageHeight = attributes.height || height;
+          const orientation = attributes.orientation || 'portrait';
+          debugger
+          const cleanUrl = url.replace('//app','/app').replace('//tmp','/tmp');
+          const rootUrl = url.includes('https://') ? endpoint+ '/' : '';
+          const resizeUrl = `${rootUrl}/${cleanUrl}?w=${imageWidth}&h=${imageHeight}&fit=${fit}&orientation=${orientation}`;
+          state.editor.insertEmbed(currentSelectionIndex, 'memod-image', resizeUrl);
+          state.editor.setSelection(state.editor.getLength(), 'user');
+        })
+    }
   }
 }
 
