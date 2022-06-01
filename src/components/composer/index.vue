@@ -10,7 +10,7 @@
         maxlength="100"
       />
     </div>
-    <div class="space-y-8 main-list">
+    <div class="space-y-8 main-list" ref="mainList">
       <composer-item
         v-for="bullet in bullets"
         :key="bullet.id"
@@ -33,10 +33,10 @@
 </template>
 
 <script setup>
-import { nextTick, onMounted, reactive, ref, toRaw, watch } from "@vue/composition-api";
+import Mitt from "mitt"
+import { nextTick, onMounted, provide, reactive, ref, toRaw, watch } from "@vue/composition-api";
 import ComposerItem from "./ComposerItem.vue";
 import Sortable from "sortablejs";
-import { composerConstants} from "../../utils/index";
 import "quill/dist/quill.bubble.css";
 import {
   emitBulletOnBlur,
@@ -44,9 +44,9 @@ import {
   emitCurrentSelectionAndFormat,
 } from "../../utils/emitters";
 import IconPlus from "../icons/IconPlus.vue";
+import { useBulletsEditor } from "../../utils/useBulletsEditor";
 
 const MAX_BULLET_LENGTH = 10;
-const { MESSAGES } = composerConstants;
 
 const props = defineProps({
   value: {
@@ -70,6 +70,9 @@ const state = reactive({
   currentSelection: null,
   suggestions: [""],
 });
+
+const eventHub = Mitt()
+provide('eventHub', eventHub)
 
 watch(() => bullets.value, (newValue) => {
   emit('input', newValue);
@@ -115,6 +118,7 @@ const addBullet = (bullet, focus = true) => {
         editor: null,
         prettyText,
         focus: false,
+        last_focus: 0,
       },
     ];
 
@@ -123,7 +127,7 @@ const addBullet = (bullet, focus = true) => {
     state.currentElement = document.querySelector(`.${editorId}`);
     nextTick(() => {
       if (focus) {
-        setEditorFocus(editorId);
+        focusBullet(id)
       }
     });
     // const $target = $('li:last');
@@ -131,29 +135,32 @@ const addBullet = (bullet, focus = true) => {
   }
 };
 
+const mainList = ref(null)
 const loadSortable = () => {
-  const list = document.querySelector(".main-list");
-  Sortable.create(list, {
-    axis: "y",
-    handle: ".bullet-order",
-    onStart: () => {
-      console.log("moving");
-      const lastFocusTime = Math.max.apply(
-        Math,
-        bullets.value.map((i) => i.last_focus)
-      );
-      const lastFocusedBullet = this.bullets.find(
-        (item) => item.last_focus === lastFocusTime
-      );
-      if (lastFocusedBullet) {
-        lastFocusedBullet.editor.blur();
-        state.currentElement = null;
-      }
-    },
-    onEnd: () => {
-      // refreshIndicatorNumbers();
-    },
-  });
+  const list = document.querySelector(mainList.value);
+  if (list) {
+    Sortable.create(list, {
+      axis: "y",
+      handle: ".bullet-order",
+      onStart: () => {
+        console.log("moving");
+        const lastFocusTime = Math.max.apply(
+          Math,
+          bullets.value.map((i) => i.last_focus)
+        );
+        const lastFocusedBullet = this.bullets.find(
+          (item) => item.last_focus === lastFocusTime
+        );
+        if (lastFocusedBullet) {
+          lastFocusedBullet.editor.blur();
+          state.currentElement = null;
+        }
+      },
+      onEnd: () => {
+        // refreshIndicatorNumbers();
+      },
+    });
+  }
 };
 
 const formatText = (format) => {
@@ -185,8 +192,6 @@ onMounted(() => {
     loadSortable();
     document.querySelector(".title").focus();
   });
-
-  window.addEventListener("message", receiveMessage, false);
 });
 
 // handle events items
@@ -222,7 +227,18 @@ const handleSuggestionQuery = () => {
   // emitOnSuggestionQuery(query);
 };
 
+const { focusLastBullet } = useBulletsEditor(bullets, setEditorFocus)
+const bulletAction = (bulletId, actionName, params) => {
+  eventHub.emit(`bullet:${bulletId}`, { name: actionName, params });
+}
+
 // ACTIONS::Exposed Actions
+
+const insertText = (text) =>  {
+  const lastBullet = focusLastBullet();
+  bulletAction(lastBullet.id, 'insertText', text);
+};
+
 const formatSelection = (format) => {
   if (args.format === "code") {
     quoteBullet();
@@ -252,10 +268,6 @@ const insertMention = (username) => {
 const insertHashtag = (tag) => {
   // @handle insert hashtag
   // this.insertMentionOrHashtag(args, 'hashtag');
-};
-
-const insertText = (text) =>  {
-  // this.insertText(args);
 };
 
 const insertMentionText = () => {
@@ -294,14 +306,23 @@ const blurBullet = () => {
  // blurEditor();
 }
 
-const focusBullet = () => {
-  //   this.focusEditor();
+const focusBullet = (bulletId, selection) => {
+  const bullet = bullets.value.find((item) => item.id === bulletId);
+  if (bullet) {
+    removeOtherFocused(bulletId);
+    bullet.focus = true;
+    bullet.last_focus = Date.now();
+    state.currentElement = bullet.editor;
+    emitBulletOnFocus(bullet.editorId);
+    emitCurrentSelectionAndFormat(selection);
+  }
 }
 
 const clearBullet = () => {
     //   this.clearEditor();
     //   this.addNewBullet();
 }
+
 
 defineExpose({
   addNewBullet,
