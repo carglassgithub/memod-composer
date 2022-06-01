@@ -26,7 +26,6 @@ const testAction = async () => {
     <MemodComposer 
       v-model="bullets" 
       ref="memodComposer" 
-      @bulled-changed="handleBulletChange"
     />
 
     <button @click="testAction">Test action</button>

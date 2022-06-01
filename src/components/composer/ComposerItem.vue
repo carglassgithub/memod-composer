@@ -36,9 +36,7 @@
 </template>
 
 <script setup>
-import Quill from "quill";
-import "../../utils/base"
-import "../../utils/modules/hyperlink";
+import Quill from "../../utils/base";
 import { inject, nextTick, onBeforeUnmount, onMounted, reactive, ref, toRaw } from "@vue/composition-api";
 import { composerConstants, getLastInsertedChar } from "../../utils/index";
 import IconClose from "../icons/IconClose.vue";
@@ -251,7 +249,6 @@ const actions = {
           const imageWidth = attributes.width || width;
           const imageHeight = attributes.height || height;
           const orientation = attributes.orientation || 'portrait';
-          debugger
           const cleanUrl = url.replace('//app','/app').replace('//tmp','/tmp');
           const rootUrl = url.includes('https://') ? endpoint+ '/' : '';
           const resizeUrl = `${rootUrl}/${cleanUrl}?w=${imageWidth}&h=${imageHeight}&fit=${fit}&orientation=${orientation}`;

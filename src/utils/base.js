@@ -1,3 +1,5 @@
+import Quill from "quill"
+
 import "quill-autoformat"
 import "docs-soap/dist/docs-soap.min.js"
 import "./quill-elements/index.js"
@@ -10,3 +12,6 @@ import "./html-elements/loader.js"
 import "./html-elements/link-card-styles.js"
 import "./html-elements/editor-link-card.js"
 import "./html-elements/memo-link-card.js"
+import "./modules/hyperlink";
+
+export default Quill;
