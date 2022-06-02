@@ -24,8 +24,8 @@ const testAction = async () => {
 <template>
   <main>
     <MemodComposer 
-      v-model="bullets" 
       ref="memodComposer" 
+      v-model="bullets" 
     />
 
     <button @click="testAction">Test action</button>

@@ -14,7 +14,7 @@
         v-for="bullet in state.bullets"
         :key="bullet.id"
         :bullet="bullet"
-        :showRemove="Boolean(state.bullets.length > 1)"
+        :show-remove="Boolean(state.bullets.length > 1)"
         :suggestions="state.suggestions"
         @text-changed="onTextChanged"
         @suggestion-query="handleSuggestionQuery"
