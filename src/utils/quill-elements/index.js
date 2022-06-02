@@ -10,11 +10,11 @@ Image.className = 'bullet-image'
 
 class CustomImage extends BlockEmbed {
   static create(value) {
-    const node = super.create();
-    const aspectRatio = getAspectRatio(value);
-    node.classList.add("image-container");
-    node.innerHTML = `<img alt='' src=${value} class='bullet-image' style="aspect-ratio:${aspectRatio}" />`;
-    return node;
+    const node = super.create()
+    const aspectRatio = getAspectRatio(value)
+    node.classList.add('image-container')
+    node.innerHTML = `<img alt='' src=${value} class='bullet-image' style="aspect-ratio:${aspectRatio}" />`
+    return node
   }
 }
 

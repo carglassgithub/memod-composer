@@ -13,6 +13,16 @@ export function createBulletObject(item) {
   return bullet
 }
 
+export function emitMessage(message) {
+  /* @ts-ignore: */
+  if (window.ReactNativeWebView) {
+    /* @ts-ignore: */
+    window.ReactNativeWebView.postMessage(JSON.stringify(message))
+  } else {
+    window.parent.postMessage(JSON.stringify(message), '*')
+  }
+}
+
 export function getContent(callback) {
   const bullets = []
 

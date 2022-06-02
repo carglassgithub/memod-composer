@@ -21,8 +21,7 @@
         @removed="handleRemove"
         @selection-updated="handleSelectionUpdated"
         @blur="handleBlur"
-        @focus="focusBullet(bullet.id)"
-      />
+        @focus="focusBullet(bullet.id)" />
     </div>
     <button
       class="mt-3 add-bullet-btn"
@@ -31,24 +30,32 @@
       <IconPlus alt="Add new bullet" />
       Add New Bullet
     </button>
-    <p> {{ state.bullets.length}}</p>
+    <p>{{ state.bullets.length }}</p>
   </div>
 </template>
 
 <script setup>
-import Mitt from "mitt"
-import { nextTick, onMounted, provide, reactive, ref, toRaw, watch } from "@vue/composition-api";
-import ComposerItem from "./ComposerItem.vue";
-import Sortable from "sortablejs";
+import Mitt from 'mitt'
+import {
+  nextTick,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  toRaw,
+  watch
+} from '@vue/composition-api'
+import ComposerItem from './ComposerItem.vue'
+import Sortable from 'sortablejs'
 
 import {
   emitBulletOnBlur,
   emitBulletOnFocus,
-  emitCurrentSelectionAndFormat,
-} from "../../utils/emitters";
-import IconPlus from "../icons/IconPlus.vue";
-import { useBulletsEditor } from "../../utils/useBulletsEditor"
-import { toRefs } from "@vue/composition-api";
+  emitCurrentSelectionAndFormat
+} from '../../utils/emitters'
+import IconPlus from '../icons/IconPlus.vue'
+import { useBulletsEditor } from '../../utils/useBulletsEditor'
+import { toRefs } from '@vue/composition-api'
 
 const MAX_BULLET_LENGTH = 10
 
@@ -60,41 +67,44 @@ const props = defineProps({
 })
 
 const emit = defineEmits([
-  "input",
-  "blur",
-  "focus",
-  "selection-updated",
-  "suggestion-query",
-]);
+  'input',
+  'blur',
+  'focus',
+  'selection-updated',
+  'suggestion-query'
+])
 
 const state = reactive({
   title: '',
   currentElement: null,
   currentSelection: null,
-  suggestions: [""],
+  suggestions: [''],
   bullets: ref(props.value)
-});
+})
 
 const eventHub = Mitt()
 provide('eventHub', eventHub)
 
-watch(() => state.bullets, (newValue) => {
-  emit('input', newValue);
-}, { deep: true });
+watch(
+  () => state.bullets,
+  (newValue) => {
+    emit('input', newValue)
+  },
+  { deep: true }
+)
 
 const onTextChanged = (bullet) => {
-  const { id } = bullet;
-  const index = state.bullets.findIndex(({ id: bulletId }) => bulletId === id);
-  state.bullets[index].prettyText = bullet.text;
-  state.bullets[index].rawText = bullet.html;
-
-};
+  const { id } = bullet
+  const index = state.bullets.findIndex(({ id: bulletId }) => bulletId === id)
+  state.bullets[index].prettyText = bullet.text
+  state.bullets[index].rawText = bullet.html
+}
 const setEditorFocus = (editorId) => {
   const bulletIndex = state.bullets.findIndex(
     (item) => item.editorId === editorId
   )
   if (bulletIndex !== -1) {
-    state.bullets[bulletIndex].focus = true;
+    state.bullets[bulletIndex].focus = true
   }
 }
 
@@ -109,10 +119,10 @@ const removeOtherFocused = (bulletId) => {
 
 const addBullet = (bullet, focus = true) => {
   if (state.bullets.length < MAX_BULLET_LENGTH) {
-    const { id: bulletId, prettyText: text } = bullet;
-    const id = bulletId || Date.now().toString();
-    const prettyText = text || "";
-    const editorId = `editor_${id}`;
+    const { id: bulletId, prettyText: text } = bullet
+    const id = bulletId || Date.now().toString()
+    const prettyText = text || ''
+    const editorId = `editor_${id}`
     state.bullets = [
       ...state.bullets,
       {
@@ -141,7 +151,7 @@ const addBullet = (bullet, focus = true) => {
 
 const mainList = ref(null)
 const loadSortable = () => {
-  const list = document.querySelector('.main-list');
+  const list = document.querySelector('.main-list')
   if (list) {
     Sortable.create(list, {
       axis: 'y',
@@ -150,7 +160,7 @@ const loadSortable = () => {
         const lastFocusTime = Math.max.apply(
           Math,
           state.bullets.map((i) => i.last_focus)
-        );
+        )
         const lastFocusedBullet = this.bullets.find(
           (item) => item.last_focus === lastFocusTime
         )
@@ -166,9 +176,7 @@ const loadSortable = () => {
   }
 }
 
-const formatText = (format) => {
-  
-}
+const formatText = (format) => {}
 
 //
 
@@ -177,17 +185,17 @@ function formatCurrentSelection(format) {
 }
 
 onMounted(() => {
-  addBullet({ prettyText: "", rawText: "" }, true);
+  addBullet({ prettyText: '', rawText: '' }, true)
   setTimeout(() => {
-    loadSortable();
-    document.querySelector(".title")?.focus();
-  });
-});
+    loadSortable()
+    document.querySelector('.title')?.focus()
+  })
+})
 
 // handle events items
 
 const handleBlur = (bulletId) => {
-  const bullet = state.bullets.find((item) => item.id === bulletId);
+  const bullet = state.bullets.find((item) => item.id === bulletId)
   if (bullet) {
     bullet.focus = false
     state.currentElement = null
@@ -196,8 +204,8 @@ const handleBlur = (bulletId) => {
 }
 
 const handleRemove = (bulletId) => {
-  state.bullets = state.bullets.filter((b) => b.id !== bulletId);
-};
+  state.bullets = state.bullets.filter((b) => b.id !== bulletId)
+}
 
 const handleSelectionUpdated = (selection) => {
   state.currentSelection = selection
@@ -207,7 +215,7 @@ const handleSuggestionQuery = () => {
   // emitOnSuggestionQuery(query);
 }
 
-const { bullets} = toRefs(state)
+const { bullets } = toRefs(state)
 const { focusLastBullet } = useBulletsEditor(bullets, setEditorFocus)
 const bulletAction = (bulletId, actionName, params) => {
   eventHub.emit(`bullet:${bulletId}`, { name: actionName, params })
@@ -235,9 +243,9 @@ const setBulletDisplayType = (type) => {
 }
 
 const insertImages = (images) => {
-  const lastBullet = focusLastBullet();
-  bulletAction(lastBullet?.id, 'insertImages', images);
-};
+  const lastBullet = focusLastBullet()
+  bulletAction(lastBullet?.id, 'insertImages', images)
+}
 
 const insertLink = (url) => {
   // @todo: handle insert link
@@ -289,7 +297,7 @@ const blurBullet = () => {
 }
 
 const focusBullet = (bulletId, selection) => {
-  const bullet = state.bullets.find((item) => item.id === bulletId);
+  const bullet = state.bullets.find((item) => item.id === bulletId)
   if (bullet) {
     removeOtherFocused(bulletId)
     bullet.focus = true
