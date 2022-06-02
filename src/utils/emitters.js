@@ -1,6 +1,5 @@
 // EMITTERS
 import {
-  emitMessage,
   createBulletObject,
   composerConstants,
   getContent
@@ -27,17 +26,14 @@ export function emitCurrentSelectionAndFormat(selection) {
       formats: '' //getCurrentSelectionFormats()
     }
   }
-  emitMessage(message)
 }
 
 export function emitBulletOnFocus(bullet_node) {
   const message = buildBulletMessage(bullet_node, MESSAGES.ON_BULLET_FOCUS)
-  emitMessage(message)
 }
 
 export function emitBulletOnChange(bullet_node) {
   const message = buildBulletMessage(bullet_node, MESSAGES.ON_BULLET_CHANGE)
-  emitMessage(message)
 }
 
 export function emitOnContentChange() {
@@ -48,7 +44,6 @@ export function emitOnContentChange() {
         bullets
       }
     }
-    emitMessage(message)
   })
 }
 
@@ -57,7 +52,6 @@ export function emitOnTitleChange(value) {
     message: MESSAGES.ON_TITLE_CHANGE,
     args: value
   }
-  emitMessage(message)
 }
 
 export function emitOnHashTag(value) {
@@ -65,7 +59,6 @@ export function emitOnHashTag(value) {
     message: MESSAGES.ON_HASHTAG,
     args: value
   }
-  emitMessage(message)
 }
 
 export function emitOnMention(value) {
@@ -73,7 +66,6 @@ export function emitOnMention(value) {
     message: MESSAGES.ON_MENTION,
     args: value
   }
-  emitMessage(message)
 }
 
 export function emitOnMentionEnd() {
@@ -81,7 +73,6 @@ export function emitOnMentionEnd() {
     message: MESSAGES.ON_MENTION_END,
     args: undefined
   }
-  emitMessage(message)
 }
 
 export function emitOnHashTagEnd() {
@@ -89,7 +80,6 @@ export function emitOnHashTagEnd() {
     message: MESSAGES.ON_HASHTAG_END,
     args: undefined
   }
-  emitMessage(message)
 }
 
 export function emitEventToTrigger(value) {
@@ -113,7 +103,6 @@ export function emitBulletOnBlur() {
     message: MESSAGES.ON_BULLET_BLUR,
     args: undefined
   }
-  emitMessage(message)
 }
 
 export function emitEditorLoaded() {
@@ -121,7 +110,6 @@ export function emitEditorLoaded() {
     message: MESSAGES.EDITOR_LOADED,
     args: undefined
   }
-  emitMessage(message)
 }
 
 export function emitOnTitleFocus() {
@@ -129,7 +117,6 @@ export function emitOnTitleFocus() {
     message: MESSAGES.ON_TITLE_FOCUS,
     args: undefined
   }
-  emitMessage(message)
 }
 
 export function emitOnSuggestionQuery(query) {
@@ -137,7 +124,6 @@ export function emitOnSuggestionQuery(query) {
     message: MESSAGES.ON_SUGGESTION_QUERY,
     args: query
   }
-  emitMessage(message)
 }
 
 export function emitOnTitleBlur() {
@@ -145,7 +131,6 @@ export function emitOnTitleBlur() {
     message: MESSAGES.ON_TITLE_BLUR,
     args: undefined
   }
-  emitMessage(message)
 }
 
 export function emitBulletsPositionUpdate() {
@@ -156,6 +141,5 @@ export function emitBulletsPositionUpdate() {
         bullets
       }
     }
-    emitMessage(message)
   })
 }
