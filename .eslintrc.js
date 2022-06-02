@@ -8,6 +8,7 @@ module.exports = {
     'no-undef': 0,
     'no-unused-vars': 0,
     'no-unexpected-multiline': 0,
-    'vue/multi-word-component-names': 0
+    'vue/multi-word-component-names': 0,
+    'no-unsafe-finally': 0
   }
 }

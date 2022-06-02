@@ -34,6 +34,8 @@ export const composerConstants = {
   COMPOSER_URL_REGEX:
     /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/g,
 
+  COMPOSER_HTML_REGEX: /(<([^>]+)>)/g,
+
   MESSAGES: {
     ADD_NEW_BULLET: 'ADD_NEW_BULLET',
     FORMAT_TEXT: 'FORMAT_TEXT',

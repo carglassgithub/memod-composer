@@ -18,7 +18,9 @@
           <IconOrder class="bullet-order-img" />
         </div>
         <div ref="editorRef" :class="`li-input editor_${bullet.id}`" />
-        <div class="bullet-char-counter">0/ {{ CHAR_LIMIT }}</div>
+        <div class="bullet-char-counter">
+          {{ chartCount(bullet.rawText) }}/ {{ CHAR_LIMIT }}
+        </div>
       </div>
     </div>
     <div
@@ -40,6 +42,7 @@ import {
   onMounted,
   reactive,
   ref,
+  computed,
   toRaw
 } from '@vue/composition-api'
 import { composerConstants, getLastInsertedChar } from '../../utils/index'
@@ -53,14 +56,18 @@ import { resizerConfig } from '../../config/resizer'
 let EVENT_WORD_INDEX = 0
 // eslint-disable-next-line no-unused-vars
 let EVENT_WORD_LENGTH = 0
-const { CHAR_LIMIT, COMPOSER_URL_REGEX } = composerConstants
+const { CHAR_LIMIT, COMPOSER_URL_REGEX, COMPOSER_HTML_REGEX } =
+  composerConstants
 
 const emit = defineEmits([
   'blur',
   'focus',
   'selection-updated',
-  'suggestion-query'
+  'suggestion-query',
+  'text-changed',
+  'removed'
 ])
+
 const props = defineProps({
   bullet: {
     type: Object,
@@ -87,7 +94,7 @@ const props = defineProps({
 const editorRef = ref()
 
 const state = reactive({
-  CHAR_LIMIT: 140,
+  CHAR_LIMIT,
   editor: null,
   currentSelection: null
 })
@@ -137,6 +144,7 @@ onMounted(() => {
 const emitTextChanges = () => {
   state.text = state.editor.getText()
   state.html = state.editor.root.innerHTML
+
   emit('text-changed', {
     text: state.text,
     html: state.html,
@@ -196,6 +204,10 @@ function checkLinkText(currentEditor, delta) {
 function getLastWord(editor, length, sliceStart = 1) {
   EVENT_WORD_LENGTH = length
   return editor.getText(EVENT_WORD_INDEX + sliceStart, length).trim()
+}
+
+function chartCount(bulletRawText) {
+  return bulletRawText.replace(COMPOSER_HTML_REGEX, '').length
 }
 
 function handleMatchedLinks(word, delta, isClickOutside) {

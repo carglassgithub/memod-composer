@@ -1,9 +1,5 @@
 // EMITTERS
-import {
-  createBulletObject,
-  composerConstants,
-  getContent
-} from './index'
+import { createBulletObject, composerConstants, getContent } from './index'
 const { MESSAGES, EVENT_TO_TRIGGER, MENTION, HASHTAG } = composerConstants
 
 export function buildBulletMessage(id, messageType) {

@@ -225,7 +225,7 @@ const bulletAction = (bulletId, actionName, params) => {
 
 const insertText = (text) => {
   const lastBullet = focusLastBullet()
-  bulletAction(lastBullet.id, 'insertText', text)
+  bulletAction(lastBullet?.id, 'insertText', text)
 }
 
 // execAction('insertText', param)
