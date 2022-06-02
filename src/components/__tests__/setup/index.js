@@ -1,3 +1,4 @@
-import Vue from 'vue'
-import CompositionApi from '@vue/composition-api'
-Vue.use(CompositionApi)
+// import {} from 'vue'
+// import VueCompositionAPI, { createApp, h } from '@vue/composition-api'
+
+// Vue.use(VueCompositionAPI)

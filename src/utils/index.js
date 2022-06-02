@@ -2,16 +2,6 @@ export function format(first, middle, last) {
   return (first || '') + (middle ? ` ${middle}` : '') + (last ? ` ${last}` : '')
 }
 
-export function emitMessage(message) {
-  /* @ts-ignore: */
-  if (window.ReactNativeWebView) {
-    /* @ts-ignore: */
-    window.ReactNativeWebView.postMessage(JSON.stringify(message))
-  } else {
-    window.parent.postMessage(JSON.stringify(message), '*')
-  }
-}
-
 export function createBulletObject(item) {
   const newContent = Boolean(item.getAttribute('new-content'))
   const bullet = {
