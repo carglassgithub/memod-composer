@@ -1,12 +1,12 @@
-import Quill  from "quill";
+import Quill from 'quill'
 
-let Inline = Quill.import("blots/inline");
-let Block = Quill.import("blots/block");
-let Image = Quill.import("formats/image");
-let BlockEmbed = Quill.import("blots/block/embed");
-let Embed = Quill.import("blots/embed");
+let Inline = Quill.import('blots/inline')
+let Block = Quill.import('blots/block')
+let Image = Quill.import('formats/image')
+let BlockEmbed = Quill.import('blots/block/embed')
+let Embed = Quill.import('blots/embed')
 
-Image.className = "bullet-image";
+Image.className = 'bullet-image'
 
 class CustomImage extends BlockEmbed {
   static create(value) {
@@ -20,51 +20,59 @@ class CustomImage extends BlockEmbed {
 
 function getAspectRatio(value) {
   try {
-    const url = new URL(value);
-    const width = url.searchParams.get("w");
-    const height = url.searchParams.get("h");
+    const url = new URL(value)
+    const width = url.searchParams.get('w')
+    const height = url.searchParams.get('h')
     if (width > height) {
-      return '16/9';
+      return '16/9'
     } else if (width < height) {
-      return '4/5';
+      return '4/5'
     } else {
-      return '1/1';
+      return '1/1'
     }
   } catch (err) {
-    return '1/1';
+    return '1/1'
   }
 }
 
 class CustomLink extends BlockEmbed {
   static create(value) {
-    const node = super.create();
-    node.setAttribute("contenteditable", "false");
-    let current = $(node);
+    const node = super.create()
+    node.setAttribute('contenteditable', 'false')
+    let current = $(node)
 
-    current.addClass("editor-link loading");
+    current.addClass('editor-link loading')
 
-    current.append('<green-loader class="green-loader">');
+    current.append('<green-loader class="green-loader">')
 
     function onRemove() {
-      current.remove();
+      current.remove()
     }
 
     function getFavicon(origin, faviconUrl) {
       try {
-        const originURL = new URL(origin).origin;
-        return faviconUrl && faviconUrl !== 'http://favicon.ico/' ? faviconUrl : `https://www.google.com/s2/favicons?domain=${originURL}&size=196`;
+        const originURL = new URL(origin).origin
+        return faviconUrl && faviconUrl !== 'http://favicon.ico/'
+          ? faviconUrl
+          : `https://www.google.com/s2/favicons?domain=${originURL}&size=196`
       } catch (e) {
-        return "";
+        return ''
       }
     }
 
     $.get(`${SITE_INFO}?url=${value}`, (response) => {
-      const { image = { url: ''}, title, description, favicon, siteName, hostname, originalUrl } =
-        response;
+      const {
+        image = { url: '' },
+        title,
+        description,
+        favicon,
+        siteName,
+        hostname,
+        originalUrl
+      } = response
 
-      const message = description || title;
-  
-  
+      const message = description || title
+
       const html = `
         <editor-link-card
           img="${image.url}"
@@ -74,30 +82,29 @@ class CustomLink extends BlockEmbed {
           sitename="${siteName}"
           hostname="${hostname}"
         />
-      `;
-      current.find(".green-loader").remove();
-      current.removeClass("loading");
-      current.append(html);
-      $("<br>").insertBefore(current);
-
-    });
-    return node;
+      `
+      current.find('.green-loader').remove()
+      current.removeClass('loading')
+      current.append(html)
+      $('<br>').insertBefore(current)
+    })
+    return node
   }
 }
 
 class MemoLink extends BlockEmbed {
   static create(value) {
-    const node = super.create();
-    node.setAttribute("contenteditable", "false");
-    let current = $(node);
+    const node = super.create()
+    node.setAttribute('contenteditable', 'false')
+    let current = $(node)
 
-    current.addClass("memo-link-card");
+    current.addClass('memo-link-card')
 
     function onRemove() {
-      current.remove();
+      current.remove()
     }
-    
-    const { id, displayname, title, slug, coverImage, coverOrientation } = value;
+
+    const { id, displayname, title, slug, coverImage, coverOrientation } = value
     const html = `
         <memo-link-card
           memoId="${id}"
@@ -109,23 +116,23 @@ class MemoLink extends BlockEmbed {
           coverimage="${coverImage}"
           coverorientation="${coverOrientation}"
         />
-      `.trim();
+      `.trim()
 
-    current.append(html);
-    return node;
+    current.append(html)
+    return node
   }
 }
 
-CustomLink.blotName = "memod-link";
-CustomLink.tagName = "div";
+CustomLink.blotName = 'memod-link'
+CustomLink.tagName = 'div'
 
-CustomImage.blotName = "memod-image";
-CustomImage.tagName = "div";
+CustomImage.blotName = 'memod-image'
+CustomImage.tagName = 'div'
 
-MemoLink.blotName = "memo-card-link";
-MemoLink.tagName = "div";
+MemoLink.blotName = 'memo-card-link'
+MemoLink.tagName = 'div'
 
-Quill.register(CustomLink);
-Quill.register(MemoLink);
-Quill.register(Image);
-Quill.register(CustomImage);
+Quill.register(CustomLink)
+Quill.register(MemoLink)
+Quill.register(Image)
+Quill.register(CustomImage)

@@ -1,18 +1,16 @@
-
-
 class Loader extends HTMLElement {
-  constructor(){
-    super();
-    const wrapper = document.createElement('div');
-    const style = document.createElement('style');
+  constructor() {
+    super()
+    const wrapper = document.createElement('div')
+    const style = document.createElement('style')
     const ACTIVE_GREEN = '#56b1a3'
     const svg = `
       <svg class="circular-loader"viewBox="25 25 50 50" >
         <circle class="loader-path" cx="50" cy="50" r="20" fill="none" stroke="${ACTIVE_GREEN}" stroke-width="2" />
       </svg>
-    `;
-    wrapper.setAttribute('class', 'loader');
-    wrapper.innerHTML = svg;
+    `
+    wrapper.setAttribute('class', 'loader')
+    wrapper.innerHTML = svg
     style.textContent = `
       .loader {
         position: relative;
@@ -117,13 +115,12 @@ class Loader extends HTMLElement {
           stroke: ${ACTIVE_GREEN};
         }
       }      
-    `;
+    `
 
-    const shadow = this.attachShadow({mode: 'open'});
-    shadow.appendChild(wrapper);
-    shadow.appendChild(style);
-
+    const shadow = this.attachShadow({ mode: 'open' })
+    shadow.appendChild(wrapper)
+    shadow.appendChild(style)
   }
 }
 
-customElements.define('green-loader', Loader);
+customElements.define('green-loader', Loader)

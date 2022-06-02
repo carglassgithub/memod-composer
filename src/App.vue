@@ -2,8 +2,8 @@
 import { ref } from "@vue/composition-api";
 import MemodComposer from "./components/composer/index.vue";
 
-const bullets = ref([]);
-const memodComposer = ref(false);
+const bullets = ref([])
+const memodComposer = ref(false)
 
 const testAction = async () => {
   const file = {

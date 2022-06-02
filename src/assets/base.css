@@ -4,59 +4,59 @@
 
 @font-face {
   /* Light */
-  font-family: "Gibson";
-  src: url("./fonts/3FIRx5i8K.otf");
+  font-family: 'Gibson';
+  src: url('./fonts/3FIRx5i8K.otf');
   font-weight: lighter;
 }
 
 @font-face {
   /* Regular */
-  font-family: "Gibson";
-  src: url("./fonts/7KHWmMg4.otf");
+  font-family: 'Gibson';
+  src: url('./fonts/7KHWmMg4.otf');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   /* Semibold */
-  font-family: "Gibson";
-  src: url("./fonts/0RoL04Fvg.otf");
+  font-family: 'Gibson';
+  src: url('./fonts/0RoL04Fvg.otf');
   font-weight: 800;
 }
 @font-face {
   /* Italic */
-  font-family: "Gibson";
-  src: url("./fonts/ofITWFYHz.otf");
+  font-family: 'Gibson';
+  src: url('./fonts/ofITWFYHz.otf');
   font-style: italic;
 }
 
 @font-face {
   /* Semibold */
-  font-family: "ZillaSlab";
-  src: url("./fonts/QWjFV7qw.ttf");
+  font-family: 'ZillaSlab';
+  src: url('./fonts/QWjFV7qw.ttf');
   font-weight: 800;
   font-style: normal;
 }
 @font-face {
   /* Semibold */
-  font-family: "ZillaSlab";
-  src: url("./fonts/0A33HmL.ttf");
+  font-family: 'ZillaSlab';
+  src: url('./fonts/0A33HmL.ttf');
   font-style: normal;
 }
 
 ::selection {
-  background-color: #05A88F;
+  background-color: #05a88f;
 }
 
 body {
   padding-right: 10px;
-  background-color: #0F0F10;
+  background-color: #0f0f10;
   color: white;
   margin: 0;
   font-size: 12px;
   font-weight: 400;
   scrollbar-width: thin;
-  scrollbar-color: #05A88F #2c2c2e;
+  scrollbar-color: #05a88f #2c2c2e;
 }
 
 body::-webkit-scrollbar {
@@ -68,7 +68,7 @@ body::-webkit-scrollbar-track {
 }
 
 body::-webkit-scrollbar-thumb {
-  background-color: #05A88F;
+  background-color: #05a88f;
 }
 
 .main-list li {
@@ -95,12 +95,12 @@ body::-webkit-scrollbar-thumb {
   width: 18px;
   height: 18px;
   background-color: #262627;
-  content: "";
+  content: '';
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  transition: background-color .3s;
+  transition: background-color 0.3s;
 }
 
 .indicator::before {
@@ -109,30 +109,29 @@ body::-webkit-scrollbar-thumb {
   border-radius: 6px;
   background-color: #333335;
   display: block;
-  content: "";
-  transition: background-color .3s;
+  content: '';
+  transition: background-color 0.3s;
 }
 
-.bullet[is-active-bullet="true"] .indicator {
+.bullet[is-active-bullet='true'] .indicator {
   background-color: #182b29;
 }
 
-.bullet[is-active-bullet="true"] .indicator::before {
+.bullet[is-active-bullet='true'] .indicator::before {
   background-color: #4ca899;
 }
 
 .indicator-number {
-  font-family: "Gibson";
+  font-family: 'Gibson';
   font-size: 1.31em !important;
-  line-height: 1.20em;
+  line-height: 1.2em;
   font-weight: 600;
   color: #656565;
   display: none;
   justify-content: center;
-
 }
 
-.indicator-number[active=true]{
+.indicator-number[active='true'] {
   color: #56b1a3;
 }
 
@@ -158,7 +157,7 @@ body::-webkit-scrollbar-thumb {
 
 .bullet .ql-editor * {
   background-color: transparent !important;
-  color: #D7D9DB !important;
+  color: #d7d9db !important;
 }
 
 .bullet .ql-editor {
@@ -181,22 +180,22 @@ body::-webkit-scrollbar-thumb {
 }
 
 .bullet .li-input::before {
-  content: "";
+  content: '';
   position: absolute;
   bottom: 0;
   width: 0%;
   height: 1px;
-  background-color: #05A88F;
-  transition: width .3s;
+  background-color: #05a88f;
+  transition: width 0.3s;
 }
 
-.bullet[is-active-bullet="true"] .li-input::before {
+.bullet[is-active-bullet='true'] .li-input::before {
   width: 100%;
 }
 
 .bullet .ql-editor::before {
   color: rgba(235, 235, 245, 0.3);
-  font-family: "Gibson";
+  font-family: 'Gibson';
   font-size: 22px !important;
   font-weight: normal;
   font-style: normal !important;
@@ -208,12 +207,12 @@ body::-webkit-scrollbar-thumb {
   bottom: -20px;
   right: 0;
   font-size: 14px;
-  color: #3A3A3C;
-  font-family: "Gibson";
-  transition: opacity .3s;
+  color: #3a3a3c;
+  font-family: 'Gibson';
+  transition: opacity 0.3s;
 }
 
-.bullet[is-active-bullet="true"] .bullet-char-counter {
+.bullet[is-active-bullet='true'] .bullet-char-counter {
   opacity: 1;
 }
 
@@ -238,18 +237,16 @@ body::-webkit-scrollbar-thumb {
   cursor: grabbing;
 }
 
-
-
 /* FORMATS */
 .li-input {
-  font-family: "Gibson";
+  font-family: 'Gibson';
   display: inline-block;
   flex: 1;
   position: relative;
   padding-bottom: 5px;
 }
 .li-input p {
-  font-family: "Gibson";
+  font-family: 'Gibson';
   font-size: 1.31em !important;
   line-height: 1.31em;
   font-weight: normal;
@@ -257,16 +254,16 @@ body::-webkit-scrollbar-thumb {
 }
 
 .li-input strong {
-  font-family: "Gibson";
+  font-family: 'Gibson';
   font-weight: 800;
 }
 .li-input code {
-  font-family: "Gibson";
+  font-family: 'Gibson';
   font-style: italic;
 }
 
 .li-input .editor-mention {
-  color: #05A88F;
+  color: #05a88f;
   display: inline-block;
 }
 
@@ -280,15 +277,22 @@ body::-webkit-scrollbar-thumb {
   max-width: 544px !important;
 }
 
-.bullet .ql-editor a, .bullet .ql-editor .ql-hyperlink, .bullet .ql-editor .ql-hyperlink span {
+.bullet .ql-editor a,
+.bullet .ql-editor .ql-hyperlink,
+.bullet .ql-editor .ql-hyperlink span {
   text-decoration: none;
-  color: #05A88F !important;
+  color: #05a88f !important;
   cursor: pointer;
 }
 
-.bullet .ql-editor a, .li-input .ql-hashtag, .li-input .ql-mention, .li-input a, .li-input .ql-mention span, .li-input .ql-hashtag span {
+.bullet .ql-editor a,
+.li-input .ql-hashtag,
+.li-input .ql-mention,
+.li-input a,
+.li-input .ql-mention span,
+.li-input .ql-hashtag span {
   text-decoration: none;
-  color: #05A88F !important
+  color: #05a88f !important;
 }
 
 .image-remove-container {
@@ -317,7 +321,7 @@ body::-webkit-scrollbar-thumb {
 }
 .editor-link.loading {
   line-height: 4px;
-  background-color: rgb(47,47,47);
+  background-color: rgb(47, 47, 47);
   min-height: 220px;
   border-radius: 8px;
   display: flex;
@@ -329,14 +333,14 @@ body::-webkit-scrollbar-thumb {
   display: flex;
   align-items: center;
   margin-bottom: 70px;
-  border-bottom: 1px solid #545458A6;
+  border-bottom: 1px solid #545458a6;
   padding-bottom: 2px;
 }
 
 .title-input-container input.text-box {
   padding: 0;
   border: none;
-  background-color: #0F0F10;
+  background-color: #0f0f10;
   color: white;
   font-family: 'Gibson';
   font-size: 2.13em;
@@ -345,7 +349,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .title-input-container input.text-box:focus {
-  border-color: #05A88F;
+  border-color: #05a88f;
 }
 
 .title-input-container input.text-box::placeholder {
@@ -364,13 +368,12 @@ body::-webkit-scrollbar-thumb {
   margin-right: 10px;
 }
 
-
 .image-container {
   transition: all 400ms ease-out;
 }
 
-.ql-editor.ql-blank::before{
-  font-family: "Gibson";
+.ql-editor.ql-blank::before {
+  font-family: 'Gibson';
   font-size: 1.31em !important;
   line-height: 1.31em;
   font-weight: normal;
@@ -380,7 +383,7 @@ body::-webkit-scrollbar-thumb {
 .add-bullet-btn {
   background-color: transparent;
   box-shadow: none;
-  font-family: "Gibson";
+  font-family: 'Gibson';
   border: 0;
   cursor: pointer;
   display: flex;
@@ -400,22 +403,22 @@ body::-webkit-scrollbar-thumb {
 }
 
 .quoted-bullet {
-  border-left: 3px solid #2C2C2E;
+  border-left: 3px solid #2c2c2e;
   padding-left: 6px !important;
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
-  font-family: "Gibson";
+  font-family: 'Gibson';
   font-style: italic;
 }
 
-.quoted-bullet.ql-editor::before{
-  color: rgba(235, 235, 245, 0.3);;
+.quoted-bullet.ql-editor::before {
+  color: rgba(235, 235, 245, 0.3);
   margin-left: 8px;
 }
 
 /* -------- */
 
-@media(max-width: 600px) {
+@media (max-width: 600px) {
   .editor-link {
     max-width: 450px;
   }
@@ -433,7 +436,7 @@ body::-webkit-scrollbar-thumb {
   }
 }
 
-@media(max-width: 510px) {
+@media (max-width: 510px) {
   .bullet .ql-editor {
     padding-right: 5px;
   }

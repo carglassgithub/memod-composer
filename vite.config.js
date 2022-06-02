@@ -6,6 +6,7 @@ import { createVuePlugin as vue2 } from 'vite-plugin-vue2'
 // @ts-ignore
 import vueTemplateBabelCompiler from 'vue-template-babel-compiler'
 import scriptSetup from 'unplugin-vue2-script-setup/vite'
+// import eslintPlugin from 'vite-plugin-eslint'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -20,7 +21,8 @@ export default defineConfig({
     legacy({
       targets: ['ie >= 11'],
       additionalLegacyPolyfills: ['regenerator-runtime/runtime']
-    })
+    }),
+    // eslintPlugin()
   ],
   resolve: {
     alias: {
@@ -30,20 +32,20 @@ export default defineConfig({
   build: {
     lib: {
       entry: fileURLToPath(
-        new URL("./src/components/index.js", import.meta.url)
+        new URL('./src/components/index.js', import.meta.url)
       ),
-      name: "memod-composer",
+      name: 'memod-composer'
     },
     rollupOptions: {
-      external: ["vue"],
+      external: ['vue'],
       output: {
         // Provide global variables to use in the UMD build
         // for externalized deps
         globals: {
-          vue: "Vue",
-        },
-      },
-    },
+          vue: 'Vue'
+        }
+      }
+    }
   },
   test: {
     globals: true,

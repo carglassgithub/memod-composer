@@ -11,11 +11,19 @@ export const useBulletsEditor = (bullets, setEditorFocus) => {
             setEditorFocus(firstBullet.id);
         }
 
-        return lastFocusedBullet;
+    if (lastFocusedBullet) {
+      lastFocusedBullet.editor.blur()
+      setEditorFocus(lastFocusedBullet.id)
+    } else {
+      const [firstBullet] = bullets.value
+      firstBullet.editor.blur()
+      setEditorFocus(firstBullet.id)
     }
 
-    return {
-        focusLastBullet,
-    }
+    return lastFocusedBullet
+  }
 
+  return {
+    focusLastBullet
+  }
 }
