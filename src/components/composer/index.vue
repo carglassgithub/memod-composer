@@ -266,8 +266,9 @@ const insertMentionText = () => {
   // this.insertMentionText();
 }
 
-const insertLinkMemo = (memo) => {
-  this.insertMemoLink(args)
+const insertMemoLink = (memoMetadata) => {
+  const lastBullet = focusLastBullet()
+  bulletAction(lastBullet?.id, 'insertMemoLink', memoMetadata)
 }
 
 const insertHashtagText = () => {
@@ -323,7 +324,7 @@ defineExpose({
   insertMentionText,
   insertImages,
   insertLink,
-  insertLinkMemo,
+  insertMemoLink,
   setEditorColor,
   getContent,
   setContent,

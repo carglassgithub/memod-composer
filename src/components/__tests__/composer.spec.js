@@ -4,36 +4,33 @@ import vueCompositionApi, { reactive, ref } from '@vue/composition-api'
 import MemoComposer from '../composer/index.vue'
 import userEvent from '@testing-library/user-event'
 
-describe('Composer inserts', () => {
+const mountComposer = () => {
   const localVue = createLocalVue()
   localVue.use(vueCompositionApi)
+
+  const state = reactive({
+    bullets: ref([])
+  })
+  return mount(MemoComposer, {
+    propsData: {
+      value: state.bullets
+    },
+    localVue
+  })
+}
+describe('Composer inserts', () => {
   const user = userEvent.setup()
+  
 
   it('should insert text', async () => {
-    const state = reactive({
-      bullets: ref([])
-    })
-    const wrapper = mount(MemoComposer, {
-      propsData: {
-        value: state.bullets
-      },
-      localVue
-    })
+    const wrapper = mountComposer()
 
     await user.click(wrapper.find('.composer-item div.ql-editor').element)
     await wrapper.vm.insertText('Hello World')
     expect(wrapper.text()).toContain('Hello World')
   })
   it('should insert image', async () => {
-    const state = reactive({
-      bullets: ref([])
-    })
-    const wrapper = mount(MemoComposer, {
-      propsData: {
-        value: state.bullets
-      },
-      localVue
-    })
+    const wrapper = mountComposer()
 
     const file = {
       id: 11934,
@@ -48,5 +45,15 @@ describe('Composer inserts', () => {
     await user.click(wrapper.find('.composer-item div.ql-editor').element)
     wrapper.vm.insertImages([file])
     expect(wrapper.contains('img')).toBeTruthy()
+  })
+
+  it('should insert memo link', async () => {
+    const wrapper = mountComposer()
+    await user.click(wrapper.find('.composer-item div.ql-editor').element)
+
+    const memoMetadata = {} 
+    wrapper.vm.insertMemoLink(memoMetadata)
+
+    expect(wrapper.contains('.memo-link-card')).toBeTruthy()
   })
 })

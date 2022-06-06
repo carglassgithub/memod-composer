@@ -96,9 +96,7 @@ class MemoLink extends BlockEmbed {
   static create(value) {
     const node = super.create()
     node.setAttribute('contenteditable', 'false')
-    let current = $(node)
-
-    current.addClass('memo-link-card')
+    node.classList.add('memo-link-card')
 
     function onRemove() {
       current.remove()
@@ -118,7 +116,7 @@ class MemoLink extends BlockEmbed {
         />
       `.trim()
 
-    current.append(html)
+    node.innerHTML = html
     return node
   }
 }

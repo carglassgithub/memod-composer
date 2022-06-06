@@ -279,6 +279,10 @@ const actions = {
         state.editor.setSelection(state.editor.getLength(), 'user')
       })
     }
+  },
+
+  insertMemoLink(memoMetadata) {
+    state.editor.insertEmbed(state.currentSelection || 0, 'memo-card-link', memoMetadata)
   }
 }
 
