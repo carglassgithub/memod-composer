@@ -11,7 +11,9 @@
     "test:e2e": "cypress open",
     "coverage": "vitest --coverage",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
-    "format": "prettier .  --write"
+    "format": "prettier .  --write",
+    "precommit": "npm run lint",
+    "prepush": "npm run test"
   },
   "dependencies": {
     "@vue/composition-api": "^1.4.6",
@@ -19,6 +21,7 @@
     "mitt": "^3.0.0",
     "quill": "^2.0.0-dev.4",
     "quill-autoformat": "^0.1.2",
+    "quill-mention": "^3.1.0",
     "sortablejs": "^1.15.0",
     "vue": "^2.6.14"
   },

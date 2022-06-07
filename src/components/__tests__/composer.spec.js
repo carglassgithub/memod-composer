@@ -22,7 +22,6 @@ const mountComposer = () => {
 describe('Composer inserts', () => {
   const user = userEvent.setup()
   
-
   it('should insert text', async () => {
     const wrapper = mountComposer()
 

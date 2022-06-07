@@ -13,5 +13,6 @@ import './html-elements/link-card-styles.js'
 import './html-elements/editor-link-card.js'
 import './html-elements/memo-link-card.js'
 import './modules/hyperlink'
-
+window.Quill = Quill
+import "quill-mention"
 export default Quill

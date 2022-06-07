@@ -63,9 +63,14 @@ const props = defineProps({
   value: {
     type: Array,
     required: true
+  },
+  suggestionQuerySearch: {
+    type: Function,
+    default: () => {}
   }
 })
 
+provide('suggestionQuerySearch', props.suggestionQuerySearch)
 const emit = defineEmits([
   'input',
   'blur',
@@ -252,6 +257,11 @@ const insertLink = (url) => {
   bulletAction(lastBullet?.id, 'insertLink', url)
 }
 
+const insertMemoLink = (memoMetadata) => {
+  const lastBullet = focusLastBullet()
+  bulletAction(lastBullet?.id, 'insertMemoLink', memoMetadata)
+}
+
 const insertMention = (username) => {
   // @handle insert mention
   // this.insertMentionOrHashtag(args, 'mention');
@@ -266,23 +276,12 @@ const insertMentionText = () => {
   // this.insertMentionText();
 }
 
-const insertMemoLink = (memoMetadata) => {
-  const lastBullet = focusLastBullet()
-  bulletAction(lastBullet?.id, 'insertMemoLink', memoMetadata)
-}
-
 const insertHashtagText = () => {
   //   this.insertHashTagText(args);
 }
 
 const setEditorColor = (color) => {
   //   this.setEditorColor(args);
-}
-
-const getContent = () => {}
-
-const setContent = (storm) => {
-  //setEditorContent(args.storm);
 }
 
 const addNewBullet = () => {
@@ -315,23 +314,21 @@ const clearBullet = () => {
 }
 
 defineExpose({
-  addNewBullet,
-  insertText,
-  insertImages,
-  insertMemoLink,
-  insertLink,
+  addNewBullet, // Done
+  insertText, // Done
+  insertImages, // Done
+  insertMemoLink, // Done
+  insertLink, // Done
   insertHashtag,
   insertHashtagText,
   insertMention,
   insertMentionText,
   formatSelection,
   setEditorColor,
-  getContent,
-  setContent,
   setBulletDisplayType,
   setTitleContent,
-  blurBullet,
-  focusBullet,
+  blurBullet, 
+  focusBullet, // Done
   clearBullet
 })
 </script>

@@ -43,7 +43,6 @@ import {
   onMounted,
   reactive,
   ref,
-  computed,
   toRaw
 } from '@vue/composition-api'
 import { composerConstants, getLastInsertedChar } from '../../utils/index'
@@ -94,6 +93,8 @@ const props = defineProps({
 
 const editorRef = ref()
 
+const suggestionQuerySearch = inject('suggestionQuerySearch', () => {})
+
 const state = reactive({
   CHAR_LIMIT,
   editor: null,
@@ -105,7 +106,19 @@ const eventHub = inject('eventHub', { on: () => {}, emit: () => {} })
 onMounted(() => {
   state.editor = new Quill(editorRef.value, {
     modules: {
-      toolbar: ['bold', 'italic', 'underline', 'blockquote', 'link', 'mention']
+      toolbar: ['bold', 'italic', 'underline', 'blockquote', 'link', 'mention'],
+      mention: {
+        allowedChars: /^[a-zA-Z0-9_]+$/,
+        mentionDenotationChars: ['@', '#'],
+        source: (searchTerm, renderList) => {
+          suggestionQuerySearch && suggestionQuerySearch(searchTerm, renderList)
+        },
+        insert(item) {
+          const index = state.editor.getSelection().index
+          state.editor.insertText(index, item.value)
+          state.editor.setSelection(index + item.value.length)
+        }
+      }
     },
     theme: 'bubble',
     placeholder: props.placeholder
@@ -288,9 +301,21 @@ const actions = {
   },
 
   insertLink(url) {
-      // eslint-disable-next-line no-debugger
-      debugger;
      state.editor.insertEmbed(state.currentSelection || 0, 'memod-link', url)
+  },
+  insertMention(label, type) {
+    if (EVENT_WORD_LENGTH > 0) {
+      editor.setSelection(state.eventWordIndex)
+      state.editor.deleteText(state.eventWordIndex, length, 'api')
+    }
+    state.editor.insertEmbed(state.currentSelection.index || 0, type, label)
+    state.editor.setSelection(editor.getLength() + 1)
+  },
+
+  insertMentionText(mentionType = '@') {
+    if(state.eventToTrigger === '') {
+      this.insertText(mentionType)
+    }
   }
 }
 
