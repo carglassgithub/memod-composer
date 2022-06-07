@@ -1,5 +1,5 @@
 import Quill from 'quill'
-
+import { previewerConfig } from "../../config/index"
 let Inline = Quill.import('blots/inline')
 let Block = Quill.import('blots/block')
 let Image = Quill.import('formats/image')
@@ -39,14 +39,11 @@ class CustomLink extends BlockEmbed {
   static create(value) {
     const node = super.create()
     node.setAttribute('contenteditable', 'false')
-    let current = $(node)
-
-    current.addClass('editor-link loading')
-
-    current.append('<green-loader class="green-loader">')
+    node.classList.add('editor-link', 'loading')
+    node.innerHTML = '<green-loader class="green-loader">'
 
     function onRemove() {
-      current.remove()
+      node.remove()
     }
 
     function getFavicon(origin, faviconUrl) {
@@ -60,7 +57,7 @@ class CustomLink extends BlockEmbed {
       }
     }
 
-    $.get(`${SITE_INFO}?url=${value}`, (response) => {
+    fetch(`${previewerConfig.endpoint}?url=${value}`).then(res => res.json()).then(response => {
       const {
         image = { url: '' },
         title,
@@ -83,10 +80,9 @@ class CustomLink extends BlockEmbed {
           hostname="${hostname}"
         />
       `
-      current.find('.green-loader').remove()
-      current.removeClass('loading')
-      current.append(html)
-      $('<br>').insertBefore(current)
+      node.querySelector('.green-loader').remove()
+      node.classList.remove('loading')
+      node.innerHTML += html
     })
     return node
   }

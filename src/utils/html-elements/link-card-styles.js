@@ -1,4 +1,4 @@
-const EDITOR_LINK_STYLES = `
+export const EDITOR_LINK_STYLES = `
 .editor-link-card {
   text-decoration: none;
   display: flex;

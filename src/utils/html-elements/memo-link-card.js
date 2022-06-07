@@ -1,3 +1,4 @@
+import { EDITOR_LINK_STYLES } from "./link-card-styles"
 class MemoLinkCard extends HTMLElement {
   constructor() {
     super()

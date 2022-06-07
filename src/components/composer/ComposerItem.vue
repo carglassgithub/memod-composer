@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 <template>
   <div
     :id="`editor_${bullet.id}`"
@@ -49,7 +50,7 @@ import { composerConstants, getLastInsertedChar } from '../../utils/index'
 import IconClose from '../icons/IconClose.vue'
 import IconOrder from '../icons/IconOrder.vue'
 import { emitCurrentSelectionAndFormat } from '../../utils/emitters'
-import { resizerConfig } from '../../config/resizer'
+import { resizerConfig } from '../../config/index'
 
 // import { insertEmbed } from "../../utils/embeds";
 
@@ -207,7 +208,8 @@ function getLastWord(editor, length, sliceStart = 1) {
 }
 
 function chartCount(bulletRawText) {
-  return bulletRawText.replace(COMPOSER_HTML_REGEX, '').length
+  // eslint-disable-next-line no-debugger
+  return bulletRawText ? bulletRawText.replace(COMPOSER_HTML_REGEX, '').length : 0
 }
 
 function handleMatchedLinks(word, delta, isClickOutside) {
@@ -283,6 +285,12 @@ const actions = {
 
   insertMemoLink(memoMetadata) {
     state.editor.insertEmbed(state.currentSelection || 0, 'memo-card-link', memoMetadata)
+  },
+
+  insertLink(url) {
+      // eslint-disable-next-line no-debugger
+      debugger;
+     state.editor.insertEmbed(state.currentSelection || 0, 'memod-link', url)
   }
 }
 

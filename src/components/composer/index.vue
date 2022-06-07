@@ -248,8 +248,8 @@ const insertImages = (images) => {
 }
 
 const insertLink = (url) => {
-  // @todo: handle insert link
-  // this.insertLink(args);
+  const lastBullet = focusLastBullet()
+  bulletAction(lastBullet?.id, 'insertLink', url)
 }
 
 const insertMention = (username) => {
@@ -316,15 +316,15 @@ const clearBullet = () => {
 
 defineExpose({
   addNewBullet,
-  formatSelection,
   insertText,
+  insertImages,
+  insertMemoLink,
+  insertLink,
   insertHashtag,
   insertHashtagText,
   insertMention,
   insertMentionText,
-  insertImages,
-  insertLink,
-  insertMemoLink,
+  formatSelection,
   setEditorColor,
   getContent,
   setContent,

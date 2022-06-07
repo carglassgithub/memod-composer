@@ -3,6 +3,7 @@ import { mount, createLocalVue } from '@vue/test-utils'
 import vueCompositionApi, { reactive, ref } from '@vue/composition-api'
 import MemoComposer from '../composer/index.vue'
 import userEvent from '@testing-library/user-event'
+import { waitFor } from '@testing-library/vue'
 
 const mountComposer = () => {
   const localVue = createLocalVue()
@@ -44,7 +45,7 @@ describe('Composer inserts', () => {
     }
     await user.click(wrapper.find('.composer-item div.ql-editor').element)
     wrapper.vm.insertImages([file])
-    expect(wrapper.contains('img')).toBeTruthy()
+    expect(wrapper.find('img')).toBeTruthy()
   })
 
   it('should insert memo link', async () => {
@@ -54,6 +55,17 @@ describe('Composer inserts', () => {
     const memoMetadata = {} 
     wrapper.vm.insertMemoLink(memoMetadata)
 
-    expect(wrapper.contains('.memo-link-card')).toBeTruthy()
+    expect(wrapper.find('.memo-link-card')).toBeTruthy()
+  })
+
+  it('should insert link', async () => {
+    const wrapper = mountComposer()
+    await user.click(wrapper.find('.composer-item div.ql-editor').element)
+
+    const memoMetadata = {} 
+    await waitFor(() => {
+      wrapper.vm.insertLink(memoMetadata)
+      expect(wrapper.find('.web-link')).toBeTruthy()
+    })
   })
 })

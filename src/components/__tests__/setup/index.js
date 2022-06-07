@@ -1,4 +1,2 @@
-// import {} from 'vue'
-// import VueCompositionAPI, { createApp, h } from '@vue/composition-api'
-
-// Vue.use(VueCompositionAPI)
+import fetch from "node-fetch"
+window.fetch = fetch

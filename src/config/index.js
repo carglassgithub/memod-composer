@@ -4,3 +4,7 @@ export const resizerConfig = {
   height: 500,
   fit: 'cover'
 }
+
+export const previewerConfig = {
+  endpoint: 'https://resizer.memodapp.com/v1/preview'
+}
