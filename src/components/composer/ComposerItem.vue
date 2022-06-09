@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 <template>
   <div
     :id="`editor_${bullet.id}`"
@@ -42,14 +43,13 @@ import {
   onMounted,
   reactive,
   ref,
-  computed,
   toRaw
 } from '@vue/composition-api'
 import { composerConstants, getLastInsertedChar } from '../../utils/index'
 import IconClose from '../icons/IconClose.vue'
 import IconOrder from '../icons/IconOrder.vue'
 import { emitCurrentSelectionAndFormat } from '../../utils/emitters'
-import { resizerConfig } from '../../config/resizer'
+import { resizerConfig } from '../../config/index'
 
 // import { insertEmbed } from "../../utils/embeds";
 
@@ -93,6 +93,8 @@ const props = defineProps({
 
 const editorRef = ref()
 
+const suggestionQuerySearch = inject('suggestionQuerySearch', () => {})
+
 const state = reactive({
   CHAR_LIMIT,
   editor: null,
@@ -104,7 +106,19 @@ const eventHub = inject('eventHub', { on: () => {}, emit: () => {} })
 onMounted(() => {
   state.editor = new Quill(editorRef.value, {
     modules: {
-      toolbar: ['bold', 'italic', 'underline', 'blockquote', 'link', 'mention']
+      toolbar: ['bold', 'italic', 'underline', 'blockquote', 'link', 'mention'],
+      mention: {
+        allowedChars: /^[a-zA-Z0-9_]+$/,
+        mentionDenotationChars: ['@', '#'],
+        source: (searchTerm, renderList) => {
+          suggestionQuerySearch && suggestionQuerySearch(searchTerm, renderList)
+        },
+        insert(item) {
+          const index = state.editor.getSelection().index
+          state.editor.insertText(index, item.value)
+          state.editor.setSelection(index + item.value.length)
+        }
+      }
     },
     theme: 'bubble',
     placeholder: props.placeholder
@@ -207,7 +221,8 @@ function getLastWord(editor, length, sliceStart = 1) {
 }
 
 function chartCount(bulletRawText) {
-  return bulletRawText.replace(COMPOSER_HTML_REGEX, '').length
+  // eslint-disable-next-line no-debugger
+  return bulletRawText ? bulletRawText.replace(COMPOSER_HTML_REGEX, '').length : 0
 }
 
 function handleMatchedLinks(word, delta, isClickOutside) {
@@ -283,6 +298,24 @@ const actions = {
 
   insertMemoLink(memoMetadata) {
     state.editor.insertEmbed(state.currentSelection || 0, 'memo-card-link', memoMetadata)
+  },
+
+  insertLink(url) {
+     state.editor.insertEmbed(state.currentSelection || 0, 'memod-link', url)
+  },
+  insertMention(label, type) {
+    if (EVENT_WORD_LENGTH > 0) {
+      editor.setSelection(state.eventWordIndex)
+      state.editor.deleteText(state.eventWordIndex, length, 'api')
+    }
+    state.editor.insertEmbed(state.currentSelection.index || 0, type, label)
+    state.editor.setSelection(editor.getLength() + 1)
+  },
+
+  insertMentionText(mentionType = '@') {
+    if(state.eventToTrigger === '') {
+      this.insertText(mentionType)
+    }
   }
 }
 
