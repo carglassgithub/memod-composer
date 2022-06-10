@@ -322,8 +322,8 @@ defineExpose({
   insertLink, // Done
   insertHashtag,
   insertHashtagText,
-  insertMention,
-  insertMentionText,
+  insertMention, // Done
+  insertMentionText, // Done
   formatSelection,
   setEditorColor,
   setBulletDisplayType,
