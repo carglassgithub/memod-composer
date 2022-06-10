@@ -1,5 +1,6 @@
 // EMITTERS
-import { createBulletObject, composerConstants, getContent } from './index'
+import { createBulletObject, getContent } from './index'
+import { composerConstants } from "./constants"
 const { MESSAGES, EVENT_TO_TRIGGER, MENTION, HASHTAG } = composerConstants
 
 export function buildBulletMessage(id, messageType) {
@@ -85,7 +86,6 @@ export function emitEventToTrigger(value) {
     emitOnHashTag(value)
   }
 }
-
 export function emitEndEventToTrigger() {
   if (EVENT_TO_TRIGGER === MENTION) {
     emitOnMentionEnd()
