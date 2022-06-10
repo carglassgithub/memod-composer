@@ -3,6 +3,7 @@
     <div class="title-input-container">
       <span class="active-part"></span>
       <input
+        ref="editorTitle"
         v-model="state.title"
         class="text-box title"
         type="text"
@@ -16,6 +17,7 @@
         :bullet="bullet"
         :show-remove="Boolean(state.bullets.length > 1)"
         :suggestions="state.suggestions"
+        :display-type="state.bulletDisplayType"
         @text-changed="onTextChanged"
         @suggestion-query="handleSuggestionQuery"
         @removed="handleRemove"
@@ -42,7 +44,6 @@ import {
   provide,
   reactive,
   ref,
-  toRaw,
   watch
 } from '@vue/composition-api'
 import ComposerItem from './ComposerItem.vue'
@@ -56,8 +57,7 @@ import {
 import IconPlus from '../icons/IconPlus.vue'
 import { useBulletsEditor } from '../../utils/useBulletsEditor'
 import { toRefs } from '@vue/composition-api'
-
-const MAX_BULLET_LENGTH = 10
+import { MAX_BULLET_LENGTH, BULLET_DISPLAY_TYPES } from '../../utils/constants'
 
 const props = defineProps({
   value: {
@@ -83,6 +83,7 @@ const state = reactive({
   title: '',
   currentElement: null,
   currentSelection: null,
+  bulletDisplayType: BULLET_DISPLAY_TYPES.bullet,
   suggestions: [''],
   bullets: ref(props.value)
 })
@@ -233,15 +234,13 @@ const insertText = (text) => {
   bulletAction(lastBullet?.id, 'insertText', text)
 }
 
-
-
 const formatSelection = (format) => {
   const lastBullet = focusLastBullet()
   bulletAction(lastBullet?.id, 'formatSelection', format)
 }
 
-const setBulletDisplayType = (type) => {
-  // changeBulletDisplayType(args);
+const setBulletDisplayType = (displayType) => {
+  state.bulletDisplayType = displayType
 }
 
 const insertImages = (images) => {
@@ -276,8 +275,11 @@ const setTitleContent = (title) => {
   state.title = title
 }
 
+const editorTitle = ref()
 const blurBullet = () => {
-  // blurEditor();
+  const lastBullet = focusLastBullet()
+  editorTitle.value?.blur()
+  bulletAction(lastBullet?.id, 'blur')
 }
 
 const focusBullet = (bulletId, selection) => {
@@ -293,8 +295,10 @@ const focusBullet = (bulletId, selection) => {
 }
 
 const clearBullet = () => {
-  //   this.clearEditor();
-  //   this.addNewBullet();
+  state.bullets.splice(0, state.bullets.length)
+  state.title = ''
+  state.bulletDisplayType = BULLET_DISPLAY_TYPES.bullet
+  addNewBullet()
 }
 
 defineExpose({
@@ -304,12 +308,11 @@ defineExpose({
   insertMemoLink, // Done
   insertLink, // Done
   insertMention, // Done
-  formatSelection, // Done
-  setEditorColor,
-  setBulletDisplayType,
+  formatSelection, // Done  // test
+  setBulletDisplayType, // Done, // test
   setTitleContent, //Done
-  blurBullet,
-  focusBullet, // Done
-  clearBullet
+  blurBullet, // Done   // test
+  focusBullet, // Done // test
+  clearBullet // Done // test
 })
 </script>

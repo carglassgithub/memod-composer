@@ -45,13 +45,12 @@ import {
   ref,
   toRaw
 } from '@vue/composition-api'
-import { composerConstants, getLastInsertedChar } from '../../utils/index'
+import { getLastInsertedChar } from '../../utils/index'
 import IconClose from '../icons/IconClose.vue'
 import IconOrder from '../icons/IconOrder.vue'
 import { emitCurrentSelectionAndFormat } from '../../utils/emitters'
 import { resizerConfig } from '../../config/index'
-
-// import { insertEmbed } from "../../utils/embeds";
+import { MAX_BULLET_LENGTH, BULLET_DISPLAY_TYPES, composerConstants } from "../../utils/constants"
 
 let EVENT_WORD_INDEX = 0
 // eslint-disable-next-line no-unused-vars
@@ -89,6 +88,10 @@ const props = defineProps({
     default() {
       return []
     }
+  },
+  displayType: {
+    type: String,
+    default: BULLET_DISPLAY_TYPES.bullet
   }
 })
 
@@ -297,7 +300,7 @@ function formatText(format) {
 }
 
 function quoteBullet() {
-    const element = document.querySelector('.ql-editor');
+    const element = editorRef.value.$el.querySelector('.ql-editor');
     const style = 'code';
     
     state.editor.setSelection(0, state.editor.getLength(), 'silent')
@@ -338,7 +341,6 @@ const actions = {
       })
     }
   },
-
   insertMemoLink(memoMetadata) {
     state.editor.insertEmbed(
       state.currentSelection || 0,
@@ -346,22 +348,22 @@ const actions = {
       memoMetadata
     )
   },
-
   insertLink(url) {
     state.editor.insertEmbed(state.currentSelection || 0, 'memod-link', url)
   },
-
   insertMention(user) {
     state.editor.insertEmbed(state.currentSelection, 'mention', user)
   },
-  
   formatSelection(format) {
     if (format === 'code') { 
       quoteBullet() // crear esto
     } else {
       formatText(format)
     }
-  }
+  },
+  blur() {
+    editorRef.value?.blur()
+  },
 }
 
 const execAction = ({ name: actionName, params }) => {
