@@ -304,7 +304,7 @@ defineExpose({
   insertMemoLink, // Done
   insertLink, // Done
   insertMention, // Done
-  formatSelection,
+  formatSelection, // Done
   setEditorColor,
   setBulletDisplayType,
   setTitleContent, //Done
