@@ -13,7 +13,8 @@ class ExtendBubbleTheme extends BubbleTheme {
   }
 
   setAnchorIcon() {
-    this.quill.theme.tooltip.root.querySelector('.ql-mention').innerHTML = '@'
+    const mention = this.quill.theme.tooltip.root.querySelector('.ql-mention')
+    mention.innerHTML = '@'
   }
 }
 

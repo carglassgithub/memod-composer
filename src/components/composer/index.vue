@@ -233,14 +233,11 @@ const insertText = (text) => {
   bulletAction(lastBullet?.id, 'insertText', text)
 }
 
-// execAction('insertText', param)
+
 
 const formatSelection = (format) => {
-  if (args.format === 'code') {
-    quoteBullet()
-  } else {
-    formatCurrentSelection(args.format)
-  }
+  const lastBullet = focusLastBullet()
+  bulletAction(lastBullet?.id, 'formatSelection', format)
 }
 
 const setBulletDisplayType = (type) => {
@@ -265,20 +262,6 @@ const insertMemoLink = (memoMetadata) => {
 const insertMention = (user) => {
   const lastBullet = focusLastBullet()
   bulletAction(lastBullet?.id, 'insertMention', user)
-
-}
-
-const insertHashtag = (tag) => {
-  // @handle insert hashtag
-  // this.insertMentionOrHashtag(args, 'hashtag');
-}
-
-const insertMentionText = () => {
-  // this.insertMentionText();
-}
-
-const insertHashtagText = () => {
-  //   this.insertHashTagText(args);
 }
 
 const setEditorColor = (color) => {
@@ -290,7 +273,7 @@ const addNewBullet = () => {
 }
 
 const setTitleContent = (title) => {
-  // emitOnTitleChange(state.title)
+  state.title = title
 }
 
 const blurBullet = () => {
@@ -320,15 +303,12 @@ defineExpose({
   insertImages, // Done
   insertMemoLink, // Done
   insertLink, // Done
-  insertHashtag,
-  insertHashtagText,
   insertMention, // Done
-  insertMentionText, // Done
   formatSelection,
   setEditorColor,
   setBulletDisplayType,
-  setTitleContent,
-  blurBullet, 
+  setTitleContent, //Done
+  blurBullet,
   focusBullet, // Done
   clearBullet
 })

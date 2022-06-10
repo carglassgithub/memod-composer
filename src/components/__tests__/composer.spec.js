@@ -21,7 +21,7 @@ const mountComposer = () => {
 }
 describe('Composer inserts', () => {
   const user = userEvent.setup()
-  
+
   it('should insert text', async () => {
     const wrapper = mountComposer()
 
@@ -51,20 +51,19 @@ describe('Composer inserts', () => {
     const wrapper = mountComposer()
     await user.click(wrapper.find('.composer-item div.ql-editor').element)
 
-    const memoMetadata = {} 
+    const memoMetadata = {}
     wrapper.vm.insertMemoLink(memoMetadata)
 
     expect(wrapper.find('.memo-link-card')).toBeTruthy()
   })
 
-  it('should insert link', async () => {
+  it('should insert mention', async () => {
     const wrapper = mountComposer()
     await user.click(wrapper.find('.composer-item div.ql-editor').element)
+    await wrapper.vm.insertText('@t')
+    await wrapper.vm.insertMention('@t')
 
-    const memoMetadata = {} 
-    await waitFor(() => {
-      wrapper.vm.insertLink(memoMetadata)
-      expect(wrapper.find('.web-link')).toBeTruthy()
-    })
+    expect(wrapper.find('.quill-mention-list')).toBeTruthy()
+    expect(wrapper.text()).toContain('@t')
   })
 })

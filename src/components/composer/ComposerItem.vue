@@ -65,7 +65,8 @@ const emit = defineEmits([
   'selection-updated',
   'suggestion-query',
   'text-changed',
-  'removed'
+  'removed',
+  'selection-format'
 ])
 
 const props = defineProps({
@@ -283,6 +284,33 @@ function updateLink(editor, index, value) {
   editor.insertEmbed(index, 'custom-hyperlink', urlValue, 'silent')
 }
 
+
+function getCurrentSelectionFormats() {
+  return state.editor.getFormat()
+}
+
+function formatText(format) {
+  const formats = getCurrentSelectionFormats()
+  const value = formats[format];
+  state.editor.format(format, !value);
+  emit('selection-format', getCurrentSelectionFormats())
+}
+
+function quoteBullet() {
+    const element = document.querySelector('.ql-editor');
+    const style = 'code';
+    
+    state.editor.setSelection(0, state.editor.getLength(), 'silent')
+    if (Array.from(element.classList).includes('quoted-bullet')) {
+      element.classList.remove('quoted-bullet');
+      formatText(style, false);
+    } else {
+      element.classList.add('quoted-bullet');
+      formatText(style)
+    }
+  state.editor.setSelection(state.editor.getLength())
+}
+
 const actions = {
   insertText(text) {
     state.editor.insertText(state.currentSelection || 0, text)
@@ -322,13 +350,16 @@ const actions = {
   insertLink(url) {
     state.editor.insertEmbed(state.currentSelection || 0, 'memod-link', url)
   },
+
   insertMention(user) {
     state.editor.insertEmbed(state.currentSelection, 'mention', user)
   },
-
-  insertMentionText(mentionType = '@') {
-    if (state.eventToTrigger === '') {
-      this.insertText(mentionType)
+  
+  formatSelection(format) {
+    if (format === 'code') { 
+      quoteBullet() // crear esto
+    } else {
+      formatText(format)
     }
   }
 }
