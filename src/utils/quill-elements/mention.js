@@ -1,12 +1,13 @@
 import Quill from 'quill'
+import QuillMention from 'quill-mention'
 const Embed = Quill.import('blots/embed')
 
 class Mention extends Embed {
-  static create(value) {
-    const node = super.create(value)
-    node.setAttribute('title', value.trim())
-    node.setAttribute('href', this.BASE_URL + value)
-    node.textContent = `@${value} `
+  static create(mention) {
+    const node = super.create(mention.value)
+    node.setAttribute('title', mention.value.trim())
+    node.setAttribute('href', this.BASE_URL + mention.value)
+    node.textContent = `@${mention.value} `
     return node
   }
 
@@ -20,4 +21,5 @@ Mention.className = 'ql-mention'
 Mention.tagName = 'A'
 Mention.BASE_URL = '/'
 
+Quill.register({ 'modules/mention': QuillMention })
 Quill.register(Mention)

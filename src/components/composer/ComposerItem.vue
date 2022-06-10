@@ -103,20 +103,44 @@ const state = reactive({
 
 const eventHub = inject('eventHub', { on: () => {}, emit: () => {} })
 
+// Temporaly
+const atValues = [
+  { id: 1, value: 'Fredrik Sundqvist' },
+  { id: 2, value: 'Patrik Sjölin' }
+]
+const hashValues = [
+  { id: 3, value: 'Fredrik Sundqvist 2' },
+  { id: 4, value: 'Patrik Sjölin 2' }
+]
+
 onMounted(() => {
   state.editor = new Quill(editorRef.value, {
     modules: {
-      toolbar: ['bold', 'italic', 'underline', 'blockquote', 'link', 'mention'],
+      toolbar: ['bold', 'italic', 'underline', 'blockquote', 'link'],
       mention: {
-        allowedChars: /^[a-zA-Z0-9_]+$/,
+        // Temporaly
+        allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
         mentionDenotationChars: ['@', '#'],
-        source: (searchTerm, renderList) => {
-          suggestionQuerySearch && suggestionQuerySearch(searchTerm, renderList)
-        },
-        insert(item) {
-          const index = state.editor.getSelection().index
-          state.editor.insertText(index, item.value)
-          state.editor.setSelection(index + item.value.length)
+        source: function (searchTerm, renderList, mentionChar) {
+          let values
+
+          if (mentionChar === '@') {
+            values = atValues
+          } else {
+            values = hashValues
+          }
+
+          if (searchTerm.length === 0) {
+            renderList(values, searchTerm)
+          } else {
+            const matches = []
+            for (let i = 0; i < values.length; i++)
+              if (
+                ~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())
+              )
+                matches.push(values[i])
+            renderList(matches, searchTerm)
+          }
         }
       }
     },
@@ -222,7 +246,9 @@ function getLastWord(editor, length, sliceStart = 1) {
 
 function chartCount(bulletRawText) {
   // eslint-disable-next-line no-debugger
-  return bulletRawText ? bulletRawText.replace(COMPOSER_HTML_REGEX, '').length : 0
+  return bulletRawText
+    ? bulletRawText.replace(COMPOSER_HTML_REGEX, '').length
+    : 0
 }
 
 function handleMatchedLinks(word, delta, isClickOutside) {
@@ -297,11 +323,15 @@ const actions = {
   },
 
   insertMemoLink(memoMetadata) {
-    state.editor.insertEmbed(state.currentSelection || 0, 'memo-card-link', memoMetadata)
+    state.editor.insertEmbed(
+      state.currentSelection || 0,
+      'memo-card-link',
+      memoMetadata
+    )
   },
 
   insertLink(url) {
-     state.editor.insertEmbed(state.currentSelection || 0, 'memod-link', url)
+    state.editor.insertEmbed(state.currentSelection || 0, 'memod-link', url)
   },
   insertMention(label, type) {
     if (EVENT_WORD_LENGTH > 0) {
@@ -313,7 +343,7 @@ const actions = {
   },
 
   insertMentionText(mentionType = '@') {
-    if(state.eventToTrigger === '') {
+    if (state.eventToTrigger === '') {
       this.insertText(mentionType)
     }
   }
