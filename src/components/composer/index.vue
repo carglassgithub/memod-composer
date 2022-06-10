@@ -262,9 +262,10 @@ const insertMemoLink = (memoMetadata) => {
   bulletAction(lastBullet?.id, 'insertMemoLink', memoMetadata)
 }
 
-const insertMention = (username) => {
-  // @handle insert mention
-  // this.insertMentionOrHashtag(args, 'mention');
+const insertMention = (user) => {
+  const lastBullet = focusLastBullet()
+  bulletAction(lastBullet?.id, 'insertMention', user)
+
 }
 
 const insertHashtag = (tag) => {

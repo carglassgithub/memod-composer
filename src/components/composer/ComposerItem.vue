@@ -108,38 +108,27 @@ const atValues = [
   { id: 1, value: 'Fredrik Sundqvist' },
   { id: 2, value: 'Patrik Sjölin' }
 ]
-const hashValues = [
-  { id: 3, value: 'Fredrik Sundqvist 2' },
-  { id: 4, value: 'Patrik Sjölin 2' }
-]
 
 onMounted(() => {
   state.editor = new Quill(editorRef.value, {
     modules: {
-      toolbar: ['bold', 'italic', 'underline', 'blockquote', 'link'],
+      toolbar: ['bold', 'italic', 'underline', 'blockquote', 'link', 'mention'],
       mention: {
-        // Temporaly
-        allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-        mentionDenotationChars: ['@', '#'],
-        source: function (searchTerm, renderList, mentionChar) {
+        mentionDenotationChars: ['@'],
+        source(searchTerm, renderList, mentionChar) {
           let values
 
           if (mentionChar === '@') {
             values = atValues
-          } else {
-            values = hashValues
           }
 
-          if (searchTerm.length === 0) {
-            renderList(values, searchTerm)
-          } else {
-            const matches = []
-            for (let i = 0; i < values.length; i++)
-              if (
-                ~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())
-              )
-                matches.push(values[i])
-            renderList(matches, searchTerm)
+          renderList(values, searchTerm)
+        },
+        keyboard: {
+          bindings: {
+            'list autofill': {
+              prefix: /^\s*()$/
+            }
           }
         }
       }
@@ -333,13 +322,8 @@ const actions = {
   insertLink(url) {
     state.editor.insertEmbed(state.currentSelection || 0, 'memod-link', url)
   },
-  insertMention(label, type) {
-    if (EVENT_WORD_LENGTH > 0) {
-      editor.setSelection(state.eventWordIndex)
-      state.editor.deleteText(state.eventWordIndex, length, 'api')
-    }
-    state.editor.insertEmbed(state.currentSelection.index || 0, type, label)
-    state.editor.setSelection(editor.getLength() + 1)
+  insertMention(user) {
+    state.editor.insertEmbed(state.currentSelection, 'mention', user)
   },
 
   insertMentionText(mentionType = '@') {

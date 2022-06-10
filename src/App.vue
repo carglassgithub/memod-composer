@@ -6,7 +6,7 @@ const bullets = ref([])
 const memodComposer = ref(false)
 
 const testAction = async () => {
-  memodComposer.value.insertLink('https://zenboard.app')
+  memodComposer.value.insertMention('Ismael')
 }
 </script>
 

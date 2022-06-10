@@ -4,10 +4,11 @@ const Embed = Quill.import('blots/embed')
 
 class Mention extends Embed {
   static create(mention) {
-    const node = super.create(mention.value)
-    node.setAttribute('title', mention.value.trim())
-    node.setAttribute('href', this.BASE_URL + mention.value)
-    node.textContent = `@${mention.value} `
+    const user = typeof mention === 'object' ? mention.value : mention
+    const node = super.create(user)
+    node.setAttribute('title', user.trim())
+    node.setAttribute('href', this.BASE_URL + user)
+    node.textContent = `@${user} `
     return node
   }
 

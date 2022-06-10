@@ -1,46 +1,39 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @font-face {
   /* Light */
   font-family: 'Gibson';
-  src: url('./fonts/3FIRx5i8K.otf');
+  src: url('../assets/fonts/3FIRx5i8K.otf');
   font-weight: lighter;
 }
-
 @font-face {
   /* Regular */
   font-family: 'Gibson';
-  src: url('./fonts/7KHWmMg4.otf');
+  src: url('../assets/fonts/7KHWmMg4.otf');
   font-weight: normal;
   font-style: normal;
 }
-
 @font-face {
   /* Semibold */
   font-family: 'Gibson';
-  src: url('./fonts/0RoL04Fvg.otf');
+  src: url('../assets/fonts/0RoL04Fvg.otf');
   font-weight: 800;
 }
 @font-face {
   /* Italic */
   font-family: 'Gibson';
-  src: url('./fonts/ofITWFYHz.otf');
+  src: url('../assets/fonts/ofITWFYHz.otf');
   font-style: italic;
 }
-
 @font-face {
   /* Semibold */
   font-family: 'ZillaSlab';
-  src: url('./fonts/QWjFV7qw.ttf');
+  src: url('../assets/fonts/QWjFV7qw.ttf');
   font-weight: 800;
   font-style: normal;
 }
 @font-face {
   /* Semibold */
   font-family: 'ZillaSlab';
-  src: url('./fonts/0A33HmL.ttf');
+  src: url('../assets/fonts/0A33HmL.ttf');
   font-style: normal;
 }
 
@@ -85,15 +78,13 @@ body::-webkit-scrollbar-thumb {
   display: flex;
   justify-content: center;
   margin-bottom: 6px;
-  width: 18px;
-  height: 18px;
 }
 
 .indicator {
   padding: 6px;
   border-radius: 18px;
-  width: 18px;
-  height: 18px;
+  width: 6px;
+  height: 6px;
   background-color: #262627;
   content: '';
   display: flex;
@@ -153,6 +144,7 @@ body::-webkit-scrollbar-thumb {
   flex-direction: row;
   align-items: flex-start;
   flex: 1;
+  width: 100%;
 }
 
 .bullet .ql-editor * {
@@ -173,13 +165,13 @@ body::-webkit-scrollbar-thumb {
   outline: 0;
 }
 
-.bullet .li-input {
-  padding-bottom: 5px;
+.bullet .ql-container {
+  padding-bottom: 10px;
   margin-left: 10px;
   position: relative;
 }
 
-.bullet .li-input::before {
+.bullet .ql-container::before {
   content: '';
   position: absolute;
   bottom: 0;
@@ -189,7 +181,7 @@ body::-webkit-scrollbar-thumb {
   transition: width 0.3s;
 }
 
-.bullet[is-active-bullet='true'] .li-input::before {
+.bullet[is-active-bullet='true'] .ql-container::before {
   width: 100%;
 }
 
@@ -219,10 +211,9 @@ body::-webkit-scrollbar-thumb {
 .remove-bullet {
   position: absolute;
   right: 0;
-  top: 0;
   width: 22px;
   cursor: pointer;
-  z-index: 1;
+  visibility: hidden;
 }
 
 .main-list {
@@ -242,8 +233,6 @@ body::-webkit-scrollbar-thumb {
   font-family: 'Gibson';
   display: inline-block;
   flex: 1;
-  position: relative;
-  padding-bottom: 5px;
 }
 .li-input p {
   font-family: 'Gibson';
@@ -274,7 +263,15 @@ body::-webkit-scrollbar-thumb {
   object-fit: contain;
   display: block;
   width: 100%;
-  max-width: 544px !important;
+}
+@media (min-width: 768px) {
+  .li-input .bullet-image {
+    width: 50%;
+  }
+}
+
+.ql-editor p {
+  word-break: break-word;
 }
 
 .bullet .ql-editor a,
@@ -285,11 +282,16 @@ body::-webkit-scrollbar-thumb {
   cursor: pointer;
 }
 
+.ql-toolbar .ql-mention {
+  color: rgb(204, 204, 204);
+  cursor: pointer;
+}
+
 .bullet .ql-editor a,
 .li-input .ql-hashtag,
-.li-input .ql-mention,
+.li-input a.ql-mention,
 .li-input a,
-.li-input .ql-mention span,
+.li-input a.ql-mention span,
 .li-input .ql-hashtag span {
   text-decoration: none;
   color: #05a88f !important;
