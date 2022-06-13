@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="state">
     <div class="title-input-container">
       <span class="active-part"></span>
       <input

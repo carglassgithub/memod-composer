@@ -1,7 +1,5 @@
 import { fileURLToPath } from 'url'
-
 import { defineConfig } from 'vite'
-import legacy from '@vitejs/plugin-legacy'
 import { createVuePlugin as vue2 } from 'vite-plugin-vue2'
 // @ts-ignore
 import vueTemplateBabelCompiler from 'vue-template-babel-compiler'
@@ -18,10 +16,6 @@ export default defineConfig({
       }
     }),
     scriptSetup(),
-    legacy({
-      targets: ['ie >= 11'],
-      additionalLegacyPolyfills: ['regenerator-runtime/runtime']
-    }),
     eslintPlugin()
   ],
   resolve: {
@@ -32,12 +26,12 @@ export default defineConfig({
   build: {
     lib: {
       entry: fileURLToPath(
-        new URL('./src/components/index.js', import.meta.url)
+        new URL('./src/components/composer/index.js', import.meta.url)
       ),
       name: 'memod-composer'
     },
     rollupOptions: {
-      external: ['vue'],
+      external: ['@vue/composition-api', 'vue'],
       output: {
         // Provide global variables to use in the UMD build
         // for externalized deps

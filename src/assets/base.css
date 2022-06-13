@@ -306,7 +306,7 @@ body::-webkit-scrollbar-thumb {
   content: '';
   width: 24px;
   height: 24px;
-  background-image: url('../assets/close-toolbar.svg');
+  /* background-image: url('../assets/close-toolbar.svg'); */
   display: block;
   background-position-x: right;
   background-repeat: no-repeat;
