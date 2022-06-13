@@ -32,7 +32,6 @@
       <IconPlus alt="Add new bullet" />
       Add New Bullet
     </button>
-    <p>{{ state.bullets.length }}</p>
   </div>
 </template>
 
@@ -60,6 +59,10 @@ import { toRefs } from '@vue/composition-api'
 import { MAX_BULLET_LENGTH, BULLET_DISPLAY_TYPES } from '../../utils/constants'
 
 const props = defineProps({
+  title: {
+    type: String,
+    default: ''
+  },
   value: {
     type: Array,
     required: true
@@ -91,8 +94,29 @@ const state = reactive({
 const eventHub = Mitt()
 provide('eventHub', eventHub)
 
+
 watch(
-  () => state.bullets,
+  () => props.title,
+  (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+      state.title = newValue
+    }
+  },
+  { immediate: true}
+)
+
+watch(
+  () => [...props.value],
+  (newValue, oldValue) => {
+    if (newValue.length !== oldValue.length) {
+      state.bullets = newValue
+    }
+  },
+  { immediate: true , deep: true}
+)
+
+watch(
+  () => [...state.bullets],
   (newValue) => {
     emit('input', newValue)
   },
@@ -289,7 +313,7 @@ const focusBullet = (bulletId, selection) => {
     bullet.focus = true
     bullet.last_focus = Date.now()
     state.currentElement = bullet.editor
-    emitBulletOnFocus(bullet.editorId)
+    emit('focus', bullet)
     emitCurrentSelectionAndFormat(selection)
   }
 }

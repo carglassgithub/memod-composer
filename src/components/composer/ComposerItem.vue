@@ -1,6 +1,6 @@
 /* eslint-disable no-debugger */
 <template>
-  <div
+  <li
     :id="`editor_${bullet.id}`"
     class="relative composer-item"
     data-testid="composer-item"
@@ -31,7 +31,7 @@
       @click.prevent.stop="$emit('removed', bullet.id)">
       <IconClose />
     </div>
-  </div>
+  </li>
 </template>
 
 <script setup>
@@ -50,7 +50,7 @@ import IconClose from '../icons/IconClose.vue'
 import IconOrder from '../icons/IconOrder.vue'
 import { emitCurrentSelectionAndFormat } from '../../utils/emitters'
 import { resizerConfig } from '../../config/index'
-import { MAX_BULLET_LENGTH, BULLET_DISPLAY_TYPES, composerConstants } from "../../utils/constants"
+import { BULLET_DISPLAY_TYPES, composerConstants } from "../../utils/constants"
 
 let EVENT_WORD_INDEX = 0
 // eslint-disable-next-line no-unused-vars
@@ -164,6 +164,9 @@ onMounted(() => {
     checkLinkText(state.editor, state.editor.getLength(), true)
   })
 
+  if (props.bullet.prettyText) {
+    state.editor.root.innerHTML = props.bullet.prettyText
+  }
   // eslint-disable-next-line vue/no-mutating-props
   props.bullet.editor = state.editor
 
