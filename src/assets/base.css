@@ -118,11 +118,11 @@ body::-webkit-scrollbar-thumb {
   line-height: 1.2em;
   font-weight: 600;
   color: #656565;
-  display: none;
+  display: flex;
   justify-content: center;
 }
 
-.indicator-number[active='true'] {
+.indicator-number[data-active='true'] {
   color: #56b1a3;
 }
 

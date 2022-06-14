@@ -1,20 +1,24 @@
-/* eslint-disable no-debugger */
 <template>
   <li
     :id="`editor_${bullet.id}`"
     class="relative composer-item"
     data-testid="composer-item"
     :new-content="bullet.id ? 'true' : 'false'">
-    <div class="bullet" :is-active-bullet="bullet.focus ? 'true' : 'false'">
+    <div class="bullet" :is-active-bullet="isFocused ? 'true' : 'false'">
       <div class="bullet-container">
         <div class="bullet-order">
           <div class="indicator-container">
             <span
+              v-if="isDisplayType(BULLET_DISPLAY_TYPES.bullet)"
               class="inline-block bullet-indicator indicator"
-              :data-active="bullet.focus ? 'true' : 'false'" />
+              :data-active="isFocused ? 'true' : 'false'" />
             <span
+              v-else
               class="bullet-indicator indicator-number"
-              :data-active="bullet.focus ? 'true' : 'false'" />
+              :data-active="isFocused ? 'true' : 'false'"
+              >
+              {{ index + 1 }}
+            </span>
           </div>
           <IconOrder class="bullet-order-img" />
         </div>
@@ -25,7 +29,7 @@
       </div>
     </div>
     <div
-      v-if="bullet.focus && showRemove"
+      v-if="isFocused && showRemove"
       class="remove-bullet"
       data-testid="btn-remove-bullet"
       @click.prevent.stop="$emit('removed', bullet.id)">
@@ -92,6 +96,14 @@ const props = defineProps({
   displayType: {
     type: String,
     default: BULLET_DISPLAY_TYPES.bullet
+  },
+  index: {
+    type: Number,
+    default: 0
+  },
+  isFocused: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -112,6 +124,10 @@ const atValues = [
   { id: 1, value: 'Fredrik Sundqvist' },
   { id: 2, value: 'Patrik Sjölin' }
 ]
+
+const isDisplayType = ((displayType) => {
+  return props.displayType === displayType
+})
 
 onMounted(() => {
   state.editor = new Quill(editorRef.value, {
@@ -135,6 +151,13 @@ onMounted(() => {
             }
           }
         }
+      },
+      keyboard: {
+        bindings: {
+          'list autofill': {
+            prefix: /^\s*()$/
+          }
+        }
       }
     },
     theme: 'bubble',
@@ -143,10 +166,11 @@ onMounted(() => {
 
   state.editor.on(Quill.events.SELECTION_CHANGE, (range) => {
     if (range) {
-      emit('focus', props.bullet.id)
+      setTimeout(() => {
+        emit('focus', props.bullet.id, range)
+      }, 200)
     }
   })
-
   state.editor.on(Quill.events.TEXT_CHANGE, (delta) => {
     const char = getLastInsertedChar(delta)
     if ([' ', '\n'].includes(char)) {
@@ -167,6 +191,39 @@ onMounted(() => {
   if (props.bullet.prettyText) {
     state.editor.root.innerHTML = props.bullet.prettyText
   }
+  
+  let Delta = Quill.import('delta');
+  state.editor.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
+      return delta.compose(new Delta().retain(delta.length()));
+  })
+
+  state.editor.root.addEventListener('paste', (evt) => {
+    const { clipboardData: cData, target } = evt;
+    const clipboardData = cData || window.clipboardData;
+    const pastedText = clipboardData.getData('text') || '';
+    const match = pastedText.match(COMPOSER_URL_REGEX);
+    if (!target.dataset.link) {
+      if (match) {
+      if (match && pastedText.length == match[0].length) {
+        const urls = [... new Set(match)];
+        urls.forEach((url, i) => {
+          let { index, length } = state.editor.getSelection(true) || { index: 0 };
+          state.editor.deleteText(index - url.length, url.length + i)
+          state.editor.setSelection(state.editor.getLength(), 0, 'user')
+          setTimeout(() => {
+            state.editor.setSelection(index - url.length, url.length, 'user')
+            actions.insertLink(url);
+            state.editor.setSelection(index, 0, 'user')
+          }, 100);
+        });
+      }
+      setTimeout(() => {
+        state.editor.setSelection(state.editor.getLength() + 1, 0, 'user')
+      })
+    }
+    }
+  })
+
   // eslint-disable-next-line vue/no-mutating-props
   props.bullet.editor = state.editor
 
@@ -241,7 +298,6 @@ function getLastWord(editor, length, sliceStart = 1) {
 }
 
 function chartCount(bulletRawText) {
-  // eslint-disable-next-line no-debugger
   return bulletRawText
     ? bulletRawText.replace(COMPOSER_HTML_REGEX, '').length
     : 0

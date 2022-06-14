@@ -1,7 +1,8 @@
 <script setup>
 import { ref, reactive } from '@vue/composition-api'
 import MemodComposer from './components/composer/index.vue'
-import { EDITOR_FORMAT } from "./utils/constants"
+import { BULLET_DISPLAY_TYPES, EDITOR_FORMAT } from "./utils/constants"
+
 const part = reactive(
     {
       "id": 64849,
@@ -284,7 +285,9 @@ const testAction = async () => {
     <MemodComposer 
       ref="memodComposer"
       v-model="part.bullets" 
-      :title="memodTitle" />
+      :title="part.title" 
+      :bullet-display-type="BULLET_DISPLAY_TYPES.numeric"  
+    />
 
     <button @click="testAction">Test action</button>
   </main>

@@ -12,12 +12,14 @@
     </div>
     <div ref="mainList" class="space-y-8 main-list">
       <composer-item
-        v-for="bullet in state.bullets"
+        v-for="(bullet, index) in state.bullets"
         :key="bullet.id"
+        :index="index"
         :bullet="bullet"
         :show-remove="Boolean(state.bullets.length > 1)"
         :suggestions="state.suggestions"
-        :display-type="state.bulletDisplayType"
+        :display-type="bulletDisplayType"
+        :is-focused="bullet.focus"
         @text-changed="onTextChanged"
         @suggestion-query="handleSuggestionQuery"
         @removed="handleRemove"
@@ -70,7 +72,12 @@ const props = defineProps({
   suggestionQuerySearch: {
     type: Function,
     default: () => {}
-  }
+  },
+  bulletDisplayType: {
+    type: String,
+    validator: value => Object.values(BULLET_DISPLAY_TYPES).includes(value),
+    default: BULLET_DISPLAY_TYPES.bullet
+  },
 })
 
 provide('suggestionQuerySearch', props.suggestionQuerySearch)
@@ -86,7 +93,6 @@ const state = reactive({
   title: '',
   currentElement: null,
   currentSelection: null,
-  bulletDisplayType: BULLET_DISPLAY_TYPES.bullet,
   suggestions: [''],
   bullets: ref(props.value)
 })
@@ -139,9 +145,9 @@ const setEditorFocus = (editorId) => {
 }
 
 const removeOtherFocused = (bulletId) => {
-  state.bullets.forEach((item) => {
+  state.bullets.forEach((item, index) => {
     if (item.focus && item.id !== bulletId) {
-      item.focus = false
+      state.bullets[index].focus = false
       handleBlur(item.id)
     }
   })
@@ -263,10 +269,6 @@ const formatSelection = (format) => {
   bulletAction(lastBullet?.id, 'formatSelection', format)
 }
 
-const setBulletDisplayType = (displayType) => {
-  state.bulletDisplayType = displayType
-}
-
 const insertImages = (images) => {
   const lastBullet = focusLastBullet()
   bulletAction(lastBullet?.id, 'insertImages', images)
@@ -307,14 +309,20 @@ const blurBullet = () => {
 }
 
 const focusBullet = (bulletId, selection) => {
-  const bullet = state.bullets.find((item) => item.id === bulletId)
-  if (bullet) {
-    removeOtherFocused(bulletId)
-    bullet.focus = true
-    bullet.last_focus = Date.now()
-    state.currentElement = bullet.editor
-    emit('focus', bullet)
-    emitCurrentSelectionAndFormat(selection)
+  const bulletIndex = state.bullets.findIndex((item) => item.id === bulletId)
+  if (bulletIndex !== -1) {
+    state.bullets = state.bullets.map(bullet => {
+      if (bullet.id == bulletId) {
+        bullet.focus = true
+        bullet.last_focus = Date.now()
+        state.currentElement = bullet.editor
+        emit('focus', bullet, selection)
+        emitCurrentSelectionAndFormat(selection)
+      } else {
+        bullet.focus = false
+      }
+      return bullet;
+    })
   }
 }
 
@@ -333,7 +341,6 @@ defineExpose({
   insertLink, // Done
   insertMention, // Done
   formatSelection, // Done  // test
-  setBulletDisplayType, // Done, // test
   setTitleContent, //Done
   blurBullet, // Done   // test
   focusBullet, // Done // test

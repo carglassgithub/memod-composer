@@ -10,11 +10,9 @@ export const BULLET_DISPLAY_TYPES = {
 }
 
 export const composerConstants = {
-  COMPOSER_URL_REGEX:
-    /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/g,
-
+  COMPOSER_URL_REGEX:/(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z()]{2,6}\b([-a-zA-Z()@:%_+.~#?&/=]*)/g,
   COMPOSER_HTML_REGEX: /(<([^>]+)>)/g,
-
+  URL_REGEX: new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z()]{2,6}\b([-a-zA-Z()@:%_+.~#?&//=]*)/, 'g'),
   MESSAGES: {
     ADD_NEW_BULLET: 'ADD_NEW_BULLET',
     FORMAT_TEXT: 'FORMAT_TEXT',
@@ -63,8 +61,6 @@ export const composerConstants = {
   MAIN_LIST: '.main-list',
   MENTION: 'MENTION',
   HASHTAG: 'HASHTAG',
-  URL_REGEX:
-    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g,
   CHAR_LIMIT: 280,
   BULLET_LIMIT: 10,
   EVENT_TO_TRIGGER: '',
