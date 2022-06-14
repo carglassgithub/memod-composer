@@ -276,7 +276,7 @@ const part = reactive(
 const memodComposer = ref(false)
 
 const testAction = async () => {
-  memodComposer.value.formatSelection(EDITOR_FORMAT.QUOTE)
+  memodComposer.value.insertImages(EDITOR_FORMAT.QUOTE)
 }
 </script>
 
@@ -292,3 +292,29 @@ const testAction = async () => {
     <button @click="testAction">Test action</button>
   </main>
 </template>
+
+
+<style lang="scss">
+body {
+  padding-right: 10px;
+  background-color: #0f0f10;
+  color: white;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  scrollbar-width: thin;
+  scrollbar-color: #05a88f #2c2c2e;
+  
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #2c2c2e;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: #05a88f;
+  }
+}
+</style>

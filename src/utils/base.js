@@ -1,7 +1,6 @@
 import Quill from 'quill'
 
 import 'quill-autoformat'
-import 'docs-soap/dist/docs-soap.min.js'
 import './quill-elements/index.js'
 import './quill-elements/hyperlink.js'
 import './quill-elements/mention.js'

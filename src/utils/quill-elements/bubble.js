@@ -8,7 +8,7 @@ class ExtendBubbleTheme extends BubbleTheme {
 
     quill.root.addEventListener('click', (e) => {
       this.setAnchorIcon()
-      quill.theme.tooltip.show()
+      // quill.theme.tooltip.show()
     })
   }
 

@@ -1,4 +1,5 @@
 import Quill from 'quill'
+import docsSoap from 'docs-soap';
 
 var Clipboard = Quill.import('modules/clipboard')
 class Clipboard2 extends Clipboard {
@@ -10,8 +11,7 @@ class Clipboard2 extends Clipboard {
     let html = e.clipboardData.getData('text/html')
     html = !html
       ? html
-      : docsSoap
-          .default(html)
+      : docsSoap(html)
           .replace('<strong>', '<b>')
           .replace('</strong>', '</b>')
     const text = e.clipboardData.getData('text/plain')
