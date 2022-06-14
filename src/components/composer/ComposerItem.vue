@@ -223,10 +223,6 @@ onMounted(() => {
     }
     }
   })
-
-  // eslint-disable-next-line vue/no-mutating-props
-  props.bullet.editor = state.editor
-
   eventHub.on(`bullet:${props.bullet.id}`, (actionName, params) => {
     execAction(actionName, params)
   })

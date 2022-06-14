@@ -165,7 +165,6 @@ const addBullet = (bullet, focus = true) => {
         ...bullet,
         id,
         editorId,
-        editor: null,
         prettyText,
         focus: false,
         last_focus: 0
@@ -201,7 +200,7 @@ const loadSortable = () => {
           (item) => item.last_focus === lastFocusTime
         )
         if (lastFocusedBullet) {
-          lastFocusedBullet.editor.blur()
+          bulletAction(lastFocusedBullet.id, 'blur')
           state.currentElement = null
         }
       },
@@ -315,7 +314,7 @@ const focusBullet = (bulletId, selection) => {
       if (bullet.id == bulletId) {
         bullet.focus = true
         bullet.last_focus = Date.now()
-        state.currentElement = bullet.editor
+        state.currentElement = document.querySelector(`.${bullet.id}`)
         emit('focus', bullet, selection)
         emitCurrentSelectionAndFormat(selection)
       } else {
