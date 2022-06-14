@@ -189,7 +189,7 @@ onMounted(() => {
   })
 
   if (props.bullet.prettyText) {
-    state.editor.root.innerHTML = props.bullet.prettyText
+    state.editor.root.innerHTML = props.bullet.prettyText.trim()
   }
   
   let Delta = Quill.import('delta');
@@ -397,14 +397,17 @@ const actions = {
     }
   },
   insertMemoLink(memoMetadata) {
+    state.editor.insertText(state.editor.getLength(), ' ')
     state.editor.insertEmbed(
       state.currentSelection || 0,
       'memo-card-link',
       memoMetadata
     )
+    state.editor.insertText(state.editor.getLength(), ' ')
   },
   insertLink(url) {
     state.editor.insertEmbed(state.currentSelection || 0, 'memod-link', url)
+    state.editor.insertText(state.editor.getLength(), ' ')
   },
   insertMention(user) {
     state.editor.insertEmbed(state.currentSelection, 'mention', user)

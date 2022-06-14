@@ -1,11 +1,9 @@
 export const useBulletsEditor = (bullets, setEditorFocus) => {
-  const focusLastBullet = () => {
-    const lastFocusTime = Math.max.apply(
-      Math,
-      bullets.value.map((bullet) => bullet.last_focus)
-    )
-    const lastFocusedBullet = bullets.value.find(
-      (item) => item.last_focus === lastFocusTime
+  const focusLastBullet = (localBullets) => {
+    const bulletReference = localBullets || bullets.value 
+    const lastFocusTime = Math.max.apply(Math, bulletReference.map((bullet) => bullet.last_focus))
+    const lastFocusedBullet = bulletReference.find(
+      (item) => item.last_focus === lastFocusTime || item.focus
     )
     if (lastFocusedBullet) {
       lastFocusedBullet.editor?.blur()

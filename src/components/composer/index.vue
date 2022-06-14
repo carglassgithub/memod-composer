@@ -1,5 +1,5 @@
 <template>
-  <div v-if="state">
+  <div v-if="state" class="memod-composer">
     <div class="title-input-container">
       <span class="active-part"></span>
       <input
@@ -52,7 +52,6 @@ import Sortable from 'sortablejs'
 
 import {
   emitBulletOnBlur,
-  emitBulletOnFocus,
   emitCurrentSelectionAndFormat
 } from '../../utils/emitters'
 import IconPlus from '../icons/IconPlus.vue'
@@ -269,7 +268,7 @@ const formatSelection = (format) => {
 }
 
 const insertImages = (images) => {
-  const lastBullet = focusLastBullet()
+  const lastBullet = focusLastBullet(state.bullets) 
   bulletAction(lastBullet?.id, 'insertImages', images)
 }
 
@@ -314,7 +313,7 @@ const focusBullet = (bulletId, selection) => {
       if (bullet.id == bulletId) {
         bullet.focus = true
         bullet.last_focus = Date.now()
-        state.currentElement = document.querySelector(`.${bullet.id}`)
+        state.currentElement = document.querySelector(`.editor_${bullet.id}`)
         emit('focus', bullet, selection)
         emitCurrentSelectionAndFormat(selection)
       } else {
