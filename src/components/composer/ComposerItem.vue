@@ -201,6 +201,7 @@ onMounted(() => {
     const clipboardData = cData || window.clipboardData;
     const pastedText = clipboardData.getData('text') || '';
     const match = pastedText.match(COMPOSER_URL_REGEX);
+
     if (!target.dataset.link) {
       if (match) {
       if (match && pastedText.length == match[0].length) {

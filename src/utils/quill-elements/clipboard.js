@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 import Quill from 'quill'
 import docsSoap from 'docs-soap';
 
@@ -11,7 +12,7 @@ class Clipboard2 extends Clipboard {
     let html = e.clipboardData.getData('text/html')
     html = !html
       ? html
-      : docsSoap(html)
+      : docsSoap.docsSoap(html)
           .replace('<strong>', '<b>')
           .replace('</strong>', '</b>')
     const text = e.clipboardData.getData('text/plain')

@@ -8,7 +8,8 @@
         class="text-box title"
         type="text"
         placeholder="Your amazing title"
-        maxlength="100" />
+        maxlength="100" 
+      />
     </div>
     <div ref="mainList" class="space-y-8 main-list">
       <composer-item
@@ -28,6 +29,7 @@
         @focus="focusBullet(bullet.id)" />
     </div>
     <button
+      v-if="canAddBullets"
       class="mt-3 add-bullet-btn"
       type="button"
       @click="addBullet({}, true)">
@@ -40,6 +42,7 @@
 <script setup>
 import Mitt from 'mitt'
 import {
+  computed,
   nextTick,
   onMounted,
   provide,
@@ -85,7 +88,8 @@ const emit = defineEmits([
   'blur',
   'focus',
   'selection-updated',
-  'suggestion-query'
+  'suggestion-query',
+  'title-updated'
 ])
 
 const state = reactive({
@@ -99,6 +103,7 @@ const state = reactive({
 const eventHub = Mitt()
 provide('eventHub', eventHub)
 
+const canAddBullets = computed(() => state.bullets.length < MAX_BULLET_LENGTH)
 
 watch(
   () => props.title,
@@ -111,8 +116,17 @@ watch(
 )
 
 watch(
+  () => state.title,
+  (newValue, oldValue) => {
+    emit('title-updated', state.title)
+  },
+  { immediate: true}
+)
+
+watch(
   () => [...props.value],
   (newValue, oldValue) => {
+    console.log(newValue)
     if (newValue.length !== oldValue.length) {
       state.bullets = newValue
     }
@@ -219,7 +233,6 @@ function formatCurrentSelection(format) {
 }
 
 onMounted(() => {
-  addBullet({ prettyText: '', rawText: '' }, true)
   setTimeout(() => {
     loadSortable()
     document.querySelector('.title')?.focus()
