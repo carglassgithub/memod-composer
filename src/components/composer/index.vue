@@ -8,7 +8,8 @@
         class="text-box title"
         type="text"
         placeholder="Your amazing title"
-        maxlength="100" />
+        maxlength="100" 
+      />
     </div>
     <div ref="mainList" class="space-y-8 main-list">
       <composer-item
@@ -28,11 +29,14 @@
         @focus="focusBullet(bullet.id)" />
     </div>
     <button
-      class="mt-3 add-bullet-btn"
+      v-if="canAddBullets"
+      class="mt-4 add-bullet-btn flex items-center"
       type="button"
       @click="addBullet({}, true)">
       <IconPlus alt="Add new bullet" />
-      Add New Bullet
+      <span class="ml-3 block">
+        Add New Bullet
+      </span>
     </button>
   </div>
 </template>
@@ -40,6 +44,7 @@
 <script setup>
 import Mitt from 'mitt'
 import {
+  computed,
   nextTick,
   onMounted,
   provide,
@@ -85,7 +90,8 @@ const emit = defineEmits([
   'blur',
   'focus',
   'selection-updated',
-  'suggestion-query'
+  'suggestion-query',
+  'title-updated'
 ])
 
 const state = reactive({
@@ -99,6 +105,7 @@ const state = reactive({
 const eventHub = Mitt()
 provide('eventHub', eventHub)
 
+const canAddBullets = computed(() => state.bullets.length < MAX_BULLET_LENGTH)
 
 watch(
   () => props.title,
@@ -111,9 +118,17 @@ watch(
 )
 
 watch(
+  () => state.title,
+  (newValue, oldValue) => {
+    emit('title-updated', state.title)
+  },
+  { immediate: true}
+)
+
+watch(
   () => [...props.value],
   (newValue, oldValue) => {
-    if (newValue.length !== oldValue.length) {
+    if (newValue.length !== oldValue.length || newValue.some((bullet, index) => bullet.prettyText !== oldValue[index].prettyText)) {
       state.bullets = newValue
     }
   },
@@ -131,8 +146,8 @@ watch(
 const onTextChanged = (bullet) => {
   const { id } = bullet
   const index = state.bullets.findIndex(({ id: bulletId }) => bulletId === id)
-  state.bullets[index].prettyText = bullet.text
-  state.bullets[index].rawText = bullet.html
+  state.bullets[index].rawText = bullet.text
+  state.bullets[index].prettyText = bullet.html
 }
 const setEditorFocus = (editorId) => {
   const bulletIndex = state.bullets.findIndex(
@@ -219,7 +234,6 @@ function formatCurrentSelection(format) {
 }
 
 onMounted(() => {
-  addBullet({ prettyText: '', rawText: '' }, true)
   setTimeout(() => {
     loadSortable()
     document.querySelector('.title')?.focus()

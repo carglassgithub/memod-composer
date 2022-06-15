@@ -109,7 +109,7 @@ const props = defineProps({
 
 const editorRef = ref()
 
-const suggestionQuerySearch = inject('suggestionQuerySearch', () => {})
+const suggestionQuerySearch = inject('suggestionQuerySearch', async () => {})
 
 const state = reactive({
   CHAR_LIMIT,
@@ -118,12 +118,6 @@ const state = reactive({
 })
 
 const eventHub = inject('eventHub', { on: () => {}, emit: () => {} })
-
-// Temporaly
-const atValues = [
-  { id: 1, value: 'Fredrik Sundqvist' },
-  { id: 2, value: 'Patrik Sjölin' }
-]
 
 const isDisplayType = ((displayType) => {
   return props.displayType === displayType
@@ -135,14 +129,19 @@ onMounted(() => {
       toolbar: ['bold', 'italic', 'underline', 'blockquote', 'link', 'mention'],
       mention: {
         mentionDenotationChars: ['@'],
-        source(searchTerm, renderList, mentionChar) {
-          let values
-
-          if (mentionChar === '@') {
-            values = atValues
-          }
-
-          renderList(values, searchTerm)
+        async source(searchTerm, renderList, mentionChar) {
+          const matchedResults = await suggestionQuerySearch(searchTerm, mentionChar)
+          renderList(matchedResults, searchTerm)
+        },
+        renderItem(item) {
+          return `<div class="inner-item">
+            <div class="avatar">
+              <img src="/assets/img/icons/avatar.svg" alt="user" />
+            </div>
+            <span>
+              ${item.value}
+            </span>
+          </div>`;
         },
         keyboard: {
           bindings: {
@@ -202,6 +201,7 @@ onMounted(() => {
     const clipboardData = cData || window.clipboardData;
     const pastedText = clipboardData.getData('text') || '';
     const match = pastedText.match(COMPOSER_URL_REGEX);
+
     if (!target.dataset.link) {
       if (match) {
       if (match && pastedText.length == match[0].length) {
@@ -444,4 +444,59 @@ defineExpose({
     color: rgba(235, 235, 245, 0.3) !important;
   }
 }
+
+.memod-composer .main-list .ql-mention-list-container {
+  background: #1a1a1c;
+  opacity: 1;
+  z-index: 100;
+  .ql-mention-list {
+    background: #1a1a1c;
+    border: 1px solid rgba(84, 84, 88, 0.65);
+    border-radius: 8px;
+    bottom: 0;
+    max-height: 200px;
+    overflow-y: scroll;
+    padding: 2px 5px;
+    width: 200px;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #2c2c2e;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: #05a88f;
+    }
+  }
+
+  .ql-mention-list-item {
+    padding: 4px 20px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 0;
+
+    .inner-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .avatar {
+      background-color: #e4e5e7;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 100%;
+      margin-right: 10px;
+      color: #373739;
+      font-weight: 600;
+    }
+  }
+}
+
 </style>
