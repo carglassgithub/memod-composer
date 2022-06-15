@@ -30,11 +30,13 @@
     </div>
     <button
       v-if="canAddBullets"
-      class="mt-3 add-bullet-btn"
+      class="mt-4 add-bullet-btn flex items-center"
       type="button"
       @click="addBullet({}, true)">
       <IconPlus alt="Add new bullet" />
-      Add New Bullet
+      <span class="ml-3 block">
+        Add New Bullet
+      </span>
     </button>
   </div>
 </template>
@@ -126,8 +128,7 @@ watch(
 watch(
   () => [...props.value],
   (newValue, oldValue) => {
-    console.log(newValue)
-    if (newValue.length !== oldValue.length) {
+    if (newValue.length !== oldValue.length || newValue.some((bullet, index) => bullet.prettyText !== oldValue[index].prettyText)) {
       state.bullets = newValue
     }
   },
@@ -145,8 +146,8 @@ watch(
 const onTextChanged = (bullet) => {
   const { id } = bullet
   const index = state.bullets.findIndex(({ id: bulletId }) => bulletId === id)
-  state.bullets[index].prettyText = bullet.text
-  state.bullets[index].rawText = bullet.html
+  state.bullets[index].rawText = bullet.text
+  state.bullets[index].prettyText = bullet.html
 }
 const setEditorFocus = (editorId) => {
   const bulletIndex = state.bullets.findIndex(
