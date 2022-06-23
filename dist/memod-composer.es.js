@@ -30114,6 +30114,7 @@ __sfc_main.setup = (__props, __ctx) => {
     state.bulletDisplayType = BULLET_DISPLAY_TYPES.bullet;
     addNewBullet();
   };
+  console.log("started");
   return Object.assign({
     state,
     canAddBullets,

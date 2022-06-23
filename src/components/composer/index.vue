@@ -350,6 +350,8 @@ const clearBullet = () => {
   addNewBullet()
 }
 
+console.log("started")
+
 defineExpose({
   addNewBullet, 
   insertText, 

@@ -1,6 +1,6 @@
 {
   "name": "memod-composer",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -34,6 +34,11 @@
     "quill-autoformat": "^0.1.2",
     "quill-mention": "^3.1.0",
     "sortablejs": "^1.15.0"
+  },
+  "peerDependencies": {
+    "unplugin-vue2-script-setup": "^0.9.3",
+    "@vue/composition-api": "^1.4.6",
+    "@vue/runtime-dom": "^3.2.31"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.18.2",
