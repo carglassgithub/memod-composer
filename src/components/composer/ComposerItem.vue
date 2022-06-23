@@ -248,14 +248,18 @@ onMounted(() => {
 })
 
 const emitTextChanges = () => {
-  state.text = state.editor.getText()
-  state.html = state.editor.root.innerHTML
-
-  emit('text-changed', {
-    text: state.text,
-    html: state.html,
-    id: props.bullet.id
-  })
+  try {
+    state.text = state.editor.getText()
+    state.html = state.editor.root.innerHTML
+  
+    emit('text-changed', {
+      text: state.text,
+      html: state.html,
+      id: props.bullet.id
+    })
+  } catch(e) {
+    console.log(e)
+  }
 }
 
 onBeforeUnmount(() => {
@@ -310,7 +314,7 @@ function getLastWord(editor, length, sliceStart = 1) {
 }
 
 const charCount = computed(() => {
-  return props.bullet?.rawText.length ?? 0
+  return props.bullet?.rawText?.length ?? 0
 })
 
 function handleMatchedLinks(word, delta, isClickOutside) {
@@ -420,8 +424,8 @@ const actions = {
     state.editor.insertText(state.editor.getLength(), ' ')
   },
   insertLink(url) {
-    state.editor.insertEmbed(state.currentSelection || 0, 'memod-link', url)
-    state.editor.insertText(state.editor.getLength(), ' ')
+    state.editor.insertEmbed(state.currentSelection || 0, 'memod-link', {value: url, callback: emitTextChanges } )
+  state.editor.insertText(state.editor.getLength(), ' ')
   },
   insertMention(user) {
     state.editor.insertEmbed(state.currentSelection, 'mention', user)
