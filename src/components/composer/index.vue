@@ -32,11 +32,11 @@
     </div>
     <button
       v-if="canAddBullets"
-      class="mt-4 add-bullet-btn flex items-center"
+      class="flex items-center mt-4 add-bullet-btn"
       type="button"
       @click="addBullet({}, true)">
       <IconPlus alt="Add new bullet" />
-      <span class="ml-3 block">
+      <span class="block ml-3">
         Add New Bullet
       </span>
     </button>

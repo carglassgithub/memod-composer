@@ -100,14 +100,14 @@ export const EDITOR_LINK_STYLES = `
 .editor-link-card .card-container .web-link .link-icon {
   width: 16px;
   height: 17px;
-  background-image: url('./assets/link.svg');
+  background-image: url('/assets/link.svg');
   margin-right: 2px;
 }
 
 .editor-link-card .card-container .web-link .user-icon {
   width: 16px;
   height: 17px;
-  background-image: url('./assets/profile.svg');
+  background-image: url('/assets/profile.svg');
   margin-right: 2px;
 }
 
@@ -115,7 +115,7 @@ export const EDITOR_LINK_STYLES = `
   width: 24px;
   height: 24px;
   display: inline-block;
-  background-image: url('./assets/close-toolbar.svg');
+  background-image: url('/assets/close-toolbar.svg');
   position: absolute;
   right: 15px;
   top: 15px;
@@ -133,7 +133,7 @@ export const EDITOR_LINK_STYLES = `
 }
 
 .memo-link-card .link-card-remove {
-  background-image: url('./assets/trash-can.svg');
+  background-image: url('/assets/trash-can.svg');
   background-size: 19px;
   background-repeat: no-repeat;
   background-color: #3e3e41;
