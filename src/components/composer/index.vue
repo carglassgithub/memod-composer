@@ -14,7 +14,7 @@
     <div ref="mainList" class="space-y-8 main-list">
       <composer-item
         v-for="(bullet, index) in state.bullets"
-        :key="bullet.id"
+        :key="`${bullet.id}-${index}`"
         :index="index"
         :bullet="bullet"
         :show-remove="Boolean(state.bullets.length > 1)"
@@ -107,6 +107,10 @@ provide('eventHub', eventHub)
 
 const canAddBullets = computed(() => state.bullets.length < MAX_BULLET_LENGTH)
 
+const setContent = (bullets) => {
+  state.bullets = ref(JSON.parse(JSON.stringify(bullets)));
+}
+
 watch(
   () => props.title,
   (newValue, oldValue) => {
@@ -129,7 +133,7 @@ watch(
   () => [...props.value],
   (newValue, oldValue) => {
     if (newValue.length !== oldValue.length || newValue.some((bullet, index) => bullet.prettyText !== oldValue[index].prettyText)) {
-      state.bullets = newValue
+      setContent(newValue)
     }
   },
   { immediate: true , deep: true}
@@ -142,10 +146,6 @@ watch(
   },
   { deep: true }
 )
-
-const setContent = (bullets) => {
-  state.bullets = bullets;
-}
 
 const onTextChanged = (bullet) => {
   const { id } = bullet
@@ -214,17 +214,23 @@ const loadSortable = () => {
           Math,
           state.bullets.map((i) => i.last_focus)
         )
-        const lastFocusedBullet = this.bullets.find(
-          (item) => item.last_focus === lastFocusTime
+        const lastFocusedBullet = state.bullets.find(
+          (item) => item.last_focus === lastFocusTime || item.focus
         )
         if (lastFocusedBullet) {
+          lastFocusedBullet.focus = false
           bulletAction(lastFocusedBullet.id, 'blur')
           state.currentElement = null
         }
       },
-      onEnd: (ent) => {
+      onEnd: (evt) => {
+        const cloneBullet = (bullet) => JSON.parse(JSON.stringify(bullet))
         console.log(evt)
-        // refreshIndicatorNumbers();
+        const localBullets = cloneBullet(state.bullets)
+        const oldBullet = cloneBullet(state.bullets[evt.oldDraggableIndex])
+        const changedBullet = cloneBullet(state.bullets[evt.newDraggableIndex])
+        localBullets[evt.oldDraggableIndex] = changedBullet
+        localBullets[evt.newDraggableIndex] = oldBullet
       }
     })
   }
@@ -349,8 +355,6 @@ const clearBullet = () => {
   state.bulletDisplayType = BULLET_DISPLAY_TYPES.bullet
   addNewBullet()
 }
-
-console.log("started")
 
 defineExpose({
   addNewBullet, 
