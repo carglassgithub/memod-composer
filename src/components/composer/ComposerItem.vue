@@ -9,7 +9,7 @@
         <div class="bullet-order">
           <div class="indicator-container">
             <span
-              v-if="isDisplayType(BULLET_DISPLAY_TYPES.bullet)"
+              v-if="isDisplayBullet"
               class="inline-block bullet-indicator indicator"
               :data-active="isFocused ? 'true' : 'false'" />
             <span
@@ -24,7 +24,7 @@
         </div>
         <div ref="editorRef" :class="`li-input editor_${bullet.id}`" />
         <div class="bullet-char-counter">
-          {{ chartCount(bullet.rawText) }}/ {{ CHAR_LIMIT }}
+          {{ charCount }} / {{ CHAR_LIMIT }}
         </div>
       </div>
     </div>
@@ -46,6 +46,7 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
+  computed,
   ref,
   toRaw
 } from '@vue/composition-api'
@@ -119,8 +120,8 @@ const state = reactive({
 
 const eventHub = inject('eventHub', { on: () => {}, emit: () => {} })
 
-const isDisplayType = ((displayType) => {
-  return props.displayType === displayType
+const isDisplayBullet = computed(() => {
+  return props.displayType === BULLET_DISPLAY_TYPES?.bullet
 })
 
 onMounted(() => {
@@ -151,6 +152,17 @@ onMounted(() => {
           }
         }
       },
+      autoformat: {
+          link: {
+            trigger: /\s|\n|\t/,
+            find: COMPOSER_URL_REGEX,
+            transform: function (value, protocol) { // value == match[0], noProtocol == match[1]
+              const urlValue = value.includes('http') ? value : `https://${value}`;
+              return urlValue;
+            },
+            insert: 'custom-hyperlink'
+          }
+      },
       keyboard: {
         bindings: {
           'list autofill': {
@@ -171,9 +183,16 @@ onMounted(() => {
     }
   })
   state.editor.on(Quill.events.TEXT_CHANGE, (delta) => {
+
+    if (state.editor.getLength() > CHAR_LIMIT) {
+      state.editor.deleteText(CHAR_LIMIT, state.editor.getLength());
+    }
+    
     const char = getLastInsertedChar(delta)
     if ([' ', '\n'].includes(char)) {
-      checkLinkText(state.editor, delta)
+      setTimeout(() => {
+          state.editor.setSelection(delta.ops[0].retain + 1, 0, 'silent');
+      });
     }
     emitTextChanges()
     nextTick(() => {
@@ -259,9 +278,6 @@ function getEventTriggerWord(editor, delta, sliceStart = 1) {
   return state.editor.getText(EVENT_WORD_INDEX + sliceStart, length).trim()
 }
 
-// function insertLink(url) {
-//   insertEmbed("memod-link", url);
-// }
 function checkLinkText(currentEditor, delta) {
   let triggeredWord
   let wordIndex
@@ -293,11 +309,9 @@ function getLastWord(editor, length, sliceStart = 1) {
   return editor.getText(EVENT_WORD_INDEX + sliceStart, length).trim()
 }
 
-function chartCount(bulletRawText) {
-  return bulletRawText
-    ? bulletRawText.replace(COMPOSER_HTML_REGEX, '').length
-    : 0
-}
+const charCount = computed(() => {
+  return props.bullet?.rawText.length ?? 0
+})
 
 function handleMatchedLinks(word, delta, isClickOutside) {
   const editor = toRaw(state.editor)

@@ -17,7 +17,7 @@ var __spreadValues = (a, b) => {
   return a;
 };
 var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
-import { ref, inject, reactive, onMounted, nextTick, onBeforeUnmount, toRaw, provide, computed, watch, toRefs } from "@vue/composition-api";
+import { ref, inject, reactive, computed, onMounted, nextTick, onBeforeUnmount, toRaw, provide, watch, toRefs } from "@vue/composition-api";
 var base = "";
 var quill_bubble = "";
 var quill_core = "";
@@ -27232,7 +27232,7 @@ var render$2 = function() {
     staticClass: "bullet-order"
   }, [_c("div", {
     staticClass: "indicator-container"
-  }, [_vm.isDisplayType(_vm.BULLET_DISPLAY_TYPES.bullet) ? _c("span", {
+  }, [_vm.isDisplayBullet ? _c("span", {
     staticClass: "inline-block bullet-indicator indicator",
     attrs: {
       "data-active": _vm.isFocused ? "true" : "false"
@@ -27249,7 +27249,7 @@ var render$2 = function() {
     class: "li-input editor_" + _vm.bullet.id
   }), _c("div", {
     staticClass: "bullet-char-counter"
-  }, [_vm._v(" " + _vm._s(_vm.chartCount(_vm.bullet.rawText)) + "/ " + _vm._s(_vm.CHAR_LIMIT) + " ")])])]), _vm.isFocused && _vm.showRemove ? _c("div", {
+  }, [_vm._v(" " + _vm._s(_vm.charCount) + " / " + _vm._s(_vm.CHAR_LIMIT) + " ")])])]), _vm.isFocused && _vm.showRemove ? _c("div", {
     staticClass: "remove-bullet",
     attrs: {
       "data-testid": "btn-remove-bullet"
@@ -27323,9 +27323,9 @@ __sfc_main$1.setup = (__props, __ctx) => {
     emit: () => {
     }
   });
-  const isDisplayType = (displayType) => {
-    return props.displayType === displayType;
-  };
+  const isDisplayBullet = computed(() => {
+    return props.displayType === (BULLET_DISPLAY_TYPES == null ? void 0 : BULLET_DISPLAY_TYPES.bullet);
+  });
   onMounted(() => {
     state.editor = new Quill$1(editorRef.value, {
       modules: {
@@ -27354,6 +27354,17 @@ __sfc_main$1.setup = (__props, __ctx) => {
             }
           }
         },
+        autoformat: {
+          link: {
+            trigger: /\s|\n|\t/,
+            find: COMPOSER_URL_REGEX,
+            transform: function(value, protocol) {
+              const urlValue = value.includes("http") ? value : `https://${value}`;
+              return urlValue;
+            },
+            insert: "custom-hyperlink"
+          }
+        },
         keyboard: {
           bindings: {
             "list autofill": {
@@ -27373,9 +27384,14 @@ __sfc_main$1.setup = (__props, __ctx) => {
       }
     });
     state.editor.on(Quill$1.events.TEXT_CHANGE, (delta) => {
+      if (state.editor.getLength() > CHAR_LIMIT) {
+        state.editor.deleteText(CHAR_LIMIT, state.editor.getLength());
+      }
       const char = getLastInsertedChar(delta);
       if ([" ", "\n"].includes(char)) {
-        checkLinkText(state.editor, delta);
+        setTimeout(() => {
+          state.editor.setSelection(delta.ops[0].retain + 1, 0, "silent");
+        });
       }
       emitTextChanges();
       nextTick(() => {
@@ -27480,9 +27496,10 @@ __sfc_main$1.setup = (__props, __ctx) => {
   function getLastWord(editor, length, sliceStart = 1) {
     return editor.getText(EVENT_WORD_INDEX + sliceStart, length).trim();
   }
-  function chartCount(bulletRawText) {
-    return bulletRawText ? bulletRawText.replace(COMPOSER_HTML_REGEX, "").length : 0;
-  }
+  const charCount = computed(() => {
+    var _a, _b;
+    return (_b = (_a = props.bullet) == null ? void 0 : _a.rawText.length) != null ? _b : 0;
+  });
   function handleMatchedLinks(word, delta, isClickOutside) {
     const editor = toRaw(state.editor);
     const length = word.length;
@@ -27602,11 +27619,10 @@ __sfc_main$1.setup = (__props, __ctx) => {
     }
   };
   return Object.assign({
-    BULLET_DISPLAY_TYPES,
     CHAR_LIMIT,
     editorRef,
-    isDisplayType,
-    chartCount
+    isDisplayBullet,
+    charCount
   }, __spreadValues({}, actions));
 };
 __sfc_main$1.components = Object.assign({
