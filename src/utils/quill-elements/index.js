@@ -36,7 +36,7 @@ function getAspectRatio(value) {
 }
 
 class CustomLink extends BlockEmbed {
-  static create(value) {
+  static create({ value, callback }) {
     const node = super.create()
     node.setAttribute('contenteditable', 'false')
     node.classList.add('editor-link', 'loading')
@@ -83,6 +83,7 @@ class CustomLink extends BlockEmbed {
       node.querySelector('.green-loader').remove()
       node.classList.remove('loading')
       node.innerHTML += html
+      callback()
     })
     return node
   }
