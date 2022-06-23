@@ -12,7 +12,7 @@
       />
     </div>
     <div ref="mainList" class="space-y-8 main-list">
-      <draggable v-model="state.bullets" group="bullets" @start="drag=true" @end="drag=false">
+      <draggable v-model="state.bullets" group="bullets" handle=".bullet-order" @start="drag=true" @end="drag=false">
           <composer-item
             v-for="(bullet, index) in state.bullets"
             :key="`${bullet.id}-${index}`"
@@ -66,7 +66,7 @@ import { useBulletsEditor } from '../../utils/useBulletsEditor'
 import { toRefs } from '@vue/composition-api'
 import { MAX_BULLET_LENGTH, BULLET_DISPLAY_TYPES } from '../../utils/constants'
 import draggable from 'vuedraggable'
-
+import { v4 } from "uuid";
 const props = defineProps({
   title: {
     type: String,
@@ -111,7 +111,11 @@ provide('eventHub', eventHub)
 const canAddBullets = computed(() => state.bullets.length < MAX_BULLET_LENGTH)
 
 const setContent = (bullets) => {
-  state.bullets = ref(JSON.parse(JSON.stringify(bullets)));
+  const localbullets = JSON.parse(JSON.stringify(bullets));
+  state.bullets = ref(localbullets.map(item => {
+    item.id = item.id || 'new_'+ v4() 
+    return item
+  }));
 }
 
 watch(
