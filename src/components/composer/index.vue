@@ -12,21 +12,23 @@
       />
     </div>
     <div ref="mainList" class="space-y-8 main-list">
-      <composer-item
-        v-for="(bullet, index) in state.bullets"
-        :key="bullet.id"
-        :index="index"
-        :bullet="bullet"
-        :show-remove="Boolean(state.bullets.length > 1)"
-        :suggestions="state.suggestions"
-        :display-type="bulletDisplayType"
-        :is-focused="bullet.focus"
-        @text-changed="onTextChanged"
-        @suggestion-query="handleSuggestionQuery"
-        @removed="handleRemove"
-        @selection-updated="handleSelectionUpdated"
-        @blur="handleBlur"
-        @focus="focusBullet(bullet.id)" />
+      <draggable v-model="state.bullets" group="bullets" handle=".bullet-order" @start="drag=true" @end="drag=false">
+          <composer-item
+            v-for="(bullet, index) in state.bullets"
+            :key="`${bullet.id}-${index}`"
+            :index="index"
+            :bullet="bullet"
+            :show-remove="Boolean(state.bullets.length > 1)"
+            :suggestions="state.suggestions"
+            :display-type="bulletDisplayType"
+            :is-focused="bullet.focus"
+            @text-changed="onTextChanged"
+            @suggestion-query="handleSuggestionQuery"
+            @removed="handleRemove"
+            @selection-updated="handleSelectionUpdated"
+            @blur="handleBlur"
+            @focus="focusBullet(bullet.id)" />
+      </draggable>
     </div>
     <button
       v-if="canAddBullets"
@@ -63,7 +65,8 @@ import IconPlus from '../icons/IconPlus.vue'
 import { useBulletsEditor } from '../../utils/useBulletsEditor'
 import { toRefs } from '@vue/composition-api'
 import { MAX_BULLET_LENGTH, BULLET_DISPLAY_TYPES } from '../../utils/constants'
-
+import draggable from 'vuedraggable'
+import { v4 } from "uuid";
 const props = defineProps({
   title: {
     type: String,
@@ -107,6 +110,14 @@ provide('eventHub', eventHub)
 
 const canAddBullets = computed(() => state.bullets.length < MAX_BULLET_LENGTH)
 
+const setContent = (bullets) => {
+  const localbullets = JSON.parse(JSON.stringify(bullets));
+  state.bullets = ref(localbullets.map(item => {
+    item.id = item.id || 'new_'+ v4() 
+    return item
+  }));
+}
+
 watch(
   () => props.title,
   (newValue, oldValue) => {
@@ -129,7 +140,7 @@ watch(
   () => [...props.value],
   (newValue, oldValue) => {
     if (newValue.length !== oldValue.length || newValue.some((bullet, index) => bullet.prettyText !== oldValue[index].prettyText)) {
-      state.bullets = newValue
+      setContent(newValue)
     }
   },
   { immediate: true , deep: true}
@@ -142,10 +153,6 @@ watch(
   },
   { deep: true }
 )
-
-const setContent = (bullets) => {
-  state.bullets = bullets;
-}
 
 const onTextChanged = (bullet) => {
   const { id } = bullet
@@ -204,30 +211,7 @@ const addBullet = (bullet, focus = true) => {
 
 const mainList = ref(null)
 const loadSortable = () => {
-  const list = document.querySelector('.main-list')
-  if (list) {
-    Sortable.create(list, {
-      axis: 'y',
-      handle: '.bullet-order',
-      onStart: () => {
-        const lastFocusTime = Math.max.apply(
-          Math,
-          state.bullets.map((i) => i.last_focus)
-        )
-        const lastFocusedBullet = this.bullets.find(
-          (item) => item.last_focus === lastFocusTime
-        )
-        if (lastFocusedBullet) {
-          bulletAction(lastFocusedBullet.id, 'blur')
-          state.currentElement = null
-        }
-      },
-      onEnd: (ent) => {
-        console.log(evt)
-        // refreshIndicatorNumbers();
-      }
-    })
-  }
+  
 }
 
 const formatText = (format) => {}
@@ -349,8 +333,6 @@ const clearBullet = () => {
   state.bulletDisplayType = BULLET_DISPLAY_TYPES.bullet
   addNewBullet()
 }
-
-console.log("started")
 
 defineExpose({
   addNewBullet, 
