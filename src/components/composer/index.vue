@@ -12,21 +12,23 @@
       />
     </div>
     <div ref="mainList" class="space-y-8 main-list">
-      <composer-item
-        v-for="(bullet, index) in state.bullets"
-        :key="`${bullet.id}-${index}`"
-        :index="index"
-        :bullet="bullet"
-        :show-remove="Boolean(state.bullets.length > 1)"
-        :suggestions="state.suggestions"
-        :display-type="bulletDisplayType"
-        :is-focused="bullet.focus"
-        @text-changed="onTextChanged"
-        @suggestion-query="handleSuggestionQuery"
-        @removed="handleRemove"
-        @selection-updated="handleSelectionUpdated"
-        @blur="handleBlur"
-        @focus="focusBullet(bullet.id)" />
+      <draggable v-model="state.bullets" group="bullets" @start="drag=true" @end="drag=false">
+          <composer-item
+            v-for="(bullet, index) in state.bullets"
+            :key="`${bullet.id}-${index}`"
+            :index="index"
+            :bullet="bullet"
+            :show-remove="Boolean(state.bullets.length > 1)"
+            :suggestions="state.suggestions"
+            :display-type="bulletDisplayType"
+            :is-focused="bullet.focus"
+            @text-changed="onTextChanged"
+            @suggestion-query="handleSuggestionQuery"
+            @removed="handleRemove"
+            @selection-updated="handleSelectionUpdated"
+            @blur="handleBlur"
+            @focus="focusBullet(bullet.id)" />
+      </draggable>
     </div>
     <button
       v-if="canAddBullets"
@@ -63,6 +65,7 @@ import IconPlus from '../icons/IconPlus.vue'
 import { useBulletsEditor } from '../../utils/useBulletsEditor'
 import { toRefs } from '@vue/composition-api'
 import { MAX_BULLET_LENGTH, BULLET_DISPLAY_TYPES } from '../../utils/constants'
+import draggable from 'vuedraggable'
 
 const props = defineProps({
   title: {
@@ -204,36 +207,7 @@ const addBullet = (bullet, focus = true) => {
 
 const mainList = ref(null)
 const loadSortable = () => {
-  const list = document.querySelector('.main-list')
-  if (list) {
-    Sortable.create(list, {
-      axis: 'y',
-      handle: '.bullet-order',
-      onStart: () => {
-        const lastFocusTime = Math.max.apply(
-          Math,
-          state.bullets.map((i) => i.last_focus)
-        )
-        const lastFocusedBullet = state.bullets.find(
-          (item) => item.last_focus === lastFocusTime || item.focus
-        )
-        if (lastFocusedBullet) {
-          lastFocusedBullet.focus = false
-          bulletAction(lastFocusedBullet.id, 'blur')
-          state.currentElement = null
-        }
-      },
-      onEnd: (evt) => {
-        const cloneBullet = (bullet) => JSON.parse(JSON.stringify(bullet))
-        console.log(evt)
-        const localBullets = cloneBullet(state.bullets)
-        const oldBullet = cloneBullet(state.bullets[evt.oldDraggableIndex])
-        const changedBullet = cloneBullet(state.bullets[evt.newDraggableIndex])
-        localBullets[evt.oldDraggableIndex] = changedBullet
-        localBullets[evt.newDraggableIndex] = oldBullet
-      }
-    })
-  }
+  
 }
 
 const formatText = (format) => {}

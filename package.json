@@ -33,7 +33,8 @@
     "quill": "^2.0.0-dev.4",
     "quill-autoformat": "^0.1.2",
     "quill-mention": "^3.1.0",
-    "sortablejs": "^1.15.0"
+    "sortablejs": "^1.15.0",
+    "vuedraggable": "^2.24.3"
   },
   "peerDependencies": {
     "unplugin-vue2-script-setup": "^0.9.3",
