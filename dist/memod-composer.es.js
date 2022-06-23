@@ -27600,6 +27600,7 @@ __sfc_main$1.setup = (__props, __ctx) => {
         value: url,
         callback: emitTextChanges
       });
+      state.editor.insertText(state.editor.getLength(), " ");
     },
     insertMention(user) {
       state.editor.insertEmbed(state.currentSelection, "mention", user);

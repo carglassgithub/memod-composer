@@ -425,6 +425,7 @@ const actions = {
   },
   insertLink(url) {
     state.editor.insertEmbed(state.currentSelection || 0, 'memod-link', {value: url, callback: emitTextChanges } )
+  state.editor.insertText(state.editor.getLength(), ' ')
   },
   insertMention(user) {
     state.editor.insertEmbed(state.currentSelection, 'mention', user)
