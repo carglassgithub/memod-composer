@@ -184,7 +184,7 @@ onMounted(() => {
 
   state.editor.root.addEventListener('blur', () => {
     state.editor.disable()
-    checkLinkText(state.editor, state.editor.getLength(), true)
+    checkLinkText(state.editor, state.editor.getContents(), true)
   })
 
   if (props.bullet.prettyText) {

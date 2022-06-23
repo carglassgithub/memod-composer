@@ -143,6 +143,10 @@ watch(
   { deep: true }
 )
 
+const setContent = (bullets) => {
+  state.bullets = bullets;
+}
+
 const onTextChanged = (bullet) => {
   const { id } = bullet
   const index = state.bullets.findIndex(({ id: bulletId }) => bulletId === id)
@@ -218,7 +222,8 @@ const loadSortable = () => {
           state.currentElement = null
         }
       },
-      onEnd: () => {
+      onEnd: (ent) => {
+        console.log(evt)
         // refreshIndicatorNumbers();
       }
     })
@@ -346,16 +351,17 @@ const clearBullet = () => {
 }
 
 defineExpose({
-  addNewBullet, // Done
-  insertText, // Done
-  insertImages, // Done
-  insertMemoLink, // Done
-  insertLink, // Done
-  insertMention, // Done
-  formatSelection, // Done  // test
-  setTitleContent, //Done
-  blurBullet, // Done   // test
-  focusBullet, // Done // test
-  clearBullet // Done // test
+  addNewBullet, 
+  insertText, 
+  insertImages,
+  insertMemoLink, 
+  insertLink, 
+  insertMention, 
+  formatSelection, 
+  setTitleContent, 
+  blurBullet, 
+  focusBullet, 
+  clearBullet, 
+  setContent
 })
 </script>
