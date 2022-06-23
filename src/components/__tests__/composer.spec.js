@@ -3,7 +3,6 @@ import { mount, createLocalVue } from '@vue/test-utils'
 import vueCompositionApi, { reactive, ref } from '@vue/composition-api'
 import MemoComposer from '../composer/index.vue'
 import userEvent from '@testing-library/user-event'
-import { waitFor } from '@testing-library/vue'
 
 const mountComposer = () => {
   const localVue = createLocalVue()

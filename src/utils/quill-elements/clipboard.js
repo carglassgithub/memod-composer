@@ -1,4 +1,3 @@
-/* eslint-disable no-debugger */
 import Quill from 'quill'
 import docsSoap from 'docs-soap';
 
@@ -20,7 +19,6 @@ class Clipboard2 extends Clipboard {
       : docsSoap.docsSoap(cleanGoogleDocsFuss(html).trim())
           .replace('<strong>', '<b>')
           .replace('</strong>', '</b>')
-    debugger
     const text = e.clipboardData.getData('text/plain')
     const files = Array.from(e.clipboardData.files || [])
     if (!html && files.length > 0) {

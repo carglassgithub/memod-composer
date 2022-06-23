@@ -18341,14 +18341,14 @@ var quill = { exports: {} };
           _inherits2(Keyboard2, _Module);
           _createClass2(Keyboard2, null, [{
             key: "match",
-            value: function match(evt, binding) {
+            value: function match(evt2, binding) {
               binding = normalize(binding);
               if (["altKey", "ctrlKey", "metaKey", "shiftKey"].some(function(key) {
-                return !!binding[key] !== evt[key] && binding[key] !== null;
+                return !!binding[key] !== evt2[key] && binding[key] !== null;
               })) {
                 return false;
               }
-              return binding.key === (evt.which || evt.keyCode);
+              return binding.key === (evt2.which || evt2.keyCode);
             }
           }]);
           function Keyboard2(quill2, options) {
@@ -18402,12 +18402,12 @@ var quill = { exports: {} };
             key: "listen",
             value: function listen() {
               var _this2 = this;
-              this.quill.root.addEventListener("keydown", function(evt) {
-                if (evt.defaultPrevented)
+              this.quill.root.addEventListener("keydown", function(evt2) {
+                if (evt2.defaultPrevented)
                   return;
-                var which = evt.which || evt.keyCode;
+                var which = evt2.which || evt2.keyCode;
                 var bindings = (_this2.bindings[which] || []).filter(function(binding) {
-                  return Keyboard2.match(evt, binding);
+                  return Keyboard2.match(evt2, binding);
                 });
                 if (bindings.length === 0)
                   return;
@@ -18458,7 +18458,7 @@ var quill = { exports: {} };
                   return binding.handler.call(_this2, range, curContext) !== true;
                 });
                 if (prevented) {
-                  evt.preventDefault();
+                  evt2.preventDefault();
                 }
               });
             }
@@ -22039,7 +22039,7 @@ var quill = { exports: {} };
           return names;
         };
         EventEmitter.prototype.listeners = function listeners(event, exists) {
-          var evt = prefix ? prefix + event : event, available = this._events[evt];
+          var evt2 = prefix ? prefix + event : event, available = this._events[evt2];
           if (exists)
             return !!available;
           if (!available)
@@ -22052,10 +22052,10 @@ var quill = { exports: {} };
           return ee;
         };
         EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
-          var evt = prefix ? prefix + event : event;
-          if (!this._events[evt])
+          var evt2 = prefix ? prefix + event : event;
+          if (!this._events[evt2])
             return false;
-          var listeners = this._events[evt], len = arguments.length, args, i;
+          var listeners = this._events[evt2], len = arguments.length, args, i;
           if (listeners.fn) {
             if (listeners.once)
               this.removeListener(event, listeners.fn, void 0, true);
@@ -22107,43 +22107,43 @@ var quill = { exports: {} };
           return true;
         };
         EventEmitter.prototype.on = function on2(event, fn, context) {
-          var listener = new EE(fn, context || this), evt = prefix ? prefix + event : event;
-          if (!this._events[evt])
-            this._events[evt] = listener, this._eventsCount++;
-          else if (!this._events[evt].fn)
-            this._events[evt].push(listener);
+          var listener = new EE(fn, context || this), evt2 = prefix ? prefix + event : event;
+          if (!this._events[evt2])
+            this._events[evt2] = listener, this._eventsCount++;
+          else if (!this._events[evt2].fn)
+            this._events[evt2].push(listener);
           else
-            this._events[evt] = [this._events[evt], listener];
+            this._events[evt2] = [this._events[evt2], listener];
           return this;
         };
         EventEmitter.prototype.once = function once(event, fn, context) {
-          var listener = new EE(fn, context || this, true), evt = prefix ? prefix + event : event;
-          if (!this._events[evt])
-            this._events[evt] = listener, this._eventsCount++;
-          else if (!this._events[evt].fn)
-            this._events[evt].push(listener);
+          var listener = new EE(fn, context || this, true), evt2 = prefix ? prefix + event : event;
+          if (!this._events[evt2])
+            this._events[evt2] = listener, this._eventsCount++;
+          else if (!this._events[evt2].fn)
+            this._events[evt2].push(listener);
           else
-            this._events[evt] = [this._events[evt], listener];
+            this._events[evt2] = [this._events[evt2], listener];
           return this;
         };
         EventEmitter.prototype.removeListener = function removeListener(event, fn, context, once) {
-          var evt = prefix ? prefix + event : event;
-          if (!this._events[evt])
+          var evt2 = prefix ? prefix + event : event;
+          if (!this._events[evt2])
             return this;
           if (!fn) {
             if (--this._eventsCount === 0)
               this._events = new Events();
             else
-              delete this._events[evt];
+              delete this._events[evt2];
             return this;
           }
-          var listeners = this._events[evt];
+          var listeners = this._events[evt2];
           if (listeners.fn) {
             if (listeners.fn === fn && (!once || listeners.once) && (!context || listeners.context === context)) {
               if (--this._eventsCount === 0)
                 this._events = new Events();
               else
-                delete this._events[evt];
+                delete this._events[evt2];
             }
           } else {
             for (var i = 0, events = [], length = listeners.length; i < length; i++) {
@@ -22152,23 +22152,23 @@ var quill = { exports: {} };
               }
             }
             if (events.length)
-              this._events[evt] = events.length === 1 ? events[0] : events;
+              this._events[evt2] = events.length === 1 ? events[0] : events;
             else if (--this._eventsCount === 0)
               this._events = new Events();
             else
-              delete this._events[evt];
+              delete this._events[evt2];
           }
           return this;
         };
         EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
-          var evt;
+          var evt2;
           if (event) {
-            evt = prefix ? prefix + event : event;
-            if (this._events[evt]) {
+            evt2 = prefix ? prefix + event : event;
+            if (this._events[evt2]) {
               if (--this._eventsCount === 0)
                 this._events = new Events();
               else
-                delete this._events[evt];
+                delete this._events[evt2];
             }
           } else {
             this._events = new Events();
@@ -26438,7 +26438,6 @@ class Clipboard2 extends Clipboard {
       return;
     let html = e.clipboardData.getData("text/html");
     html = !html ? html : docsSoap_1.docsSoap(cleanGoogleDocsFuss(html).trim()).replace("<strong>", "<b>").replace("</strong>", "</b>");
-    debugger;
     const text = e.clipboardData.getData("text/plain");
     const files = Array.from(e.clipboardData.files || []);
     if (!html && files.length > 0) {
@@ -27371,7 +27370,7 @@ __sfc_main$1.setup = (__props, __ctx) => {
     });
     state.editor.root.addEventListener("blur", () => {
       state.editor.disable();
-      checkLinkText(state.editor, state.editor.getLength());
+      checkLinkText(state.editor, state.editor.getContents());
     });
     if (props.bullet.prettyText) {
       state.editor.root.innerHTML = props.bullet.prettyText.trim();
@@ -27380,11 +27379,11 @@ __sfc_main$1.setup = (__props, __ctx) => {
     state.editor.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
       return delta.compose(new Delta().retain(delta.length()));
     });
-    state.editor.root.addEventListener("paste", (evt) => {
+    state.editor.root.addEventListener("paste", (evt2) => {
       const {
         clipboardData: cData,
         target
-      } = evt;
+      } = evt2;
       const clipboardData = cData || window.clipboardData;
       const pastedText = clipboardData.getData("text") || "";
       const match = pastedText.match(COMPOSER_URL_REGEX);
@@ -28169,10 +28168,10 @@ var PluginManager = {
     });
     plugins.push(plugin);
   },
-  pluginEvent: function pluginEvent2(eventName, sortable, evt) {
+  pluginEvent: function pluginEvent2(eventName, sortable, evt2) {
     var _this = this;
     this.eventCanceled = false;
-    evt.cancel = function() {
+    evt2.cancel = function() {
       _this.eventCanceled = true;
     };
     var eventNameGlobal = eventName + "Global";
@@ -28182,12 +28181,12 @@ var PluginManager = {
       if (sortable[plugin.pluginName][eventNameGlobal]) {
         sortable[plugin.pluginName][eventNameGlobal](_objectSpread2({
           sortable
-        }, evt));
+        }, evt2));
       }
       if (sortable.options[plugin.pluginName] && sortable[plugin.pluginName][eventName]) {
         sortable[plugin.pluginName][eventName](_objectSpread2({
           sortable
-        }, evt));
+        }, evt2));
       }
     });
   },
@@ -28237,35 +28236,35 @@ function dispatchEvent(_ref) {
   sortable = sortable || rootEl2 && rootEl2[expando];
   if (!sortable)
     return;
-  var evt, options = sortable.options, onName = "on" + name.charAt(0).toUpperCase() + name.substr(1);
+  var evt2, options = sortable.options, onName = "on" + name.charAt(0).toUpperCase() + name.substr(1);
   if (window.CustomEvent && !IE11OrLess && !Edge) {
-    evt = new CustomEvent(name, {
+    evt2 = new CustomEvent(name, {
       bubbles: true,
       cancelable: true
     });
   } else {
-    evt = document.createEvent("Event");
-    evt.initEvent(name, true, true);
+    evt2 = document.createEvent("Event");
+    evt2.initEvent(name, true, true);
   }
-  evt.to = toEl || rootEl2;
-  evt.from = fromEl || rootEl2;
-  evt.item = targetEl || rootEl2;
-  evt.clone = cloneEl2;
-  evt.oldIndex = oldIndex2;
-  evt.newIndex = newIndex2;
-  evt.oldDraggableIndex = oldDraggableIndex2;
-  evt.newDraggableIndex = newDraggableIndex2;
-  evt.originalEvent = originalEvent;
-  evt.pullMode = putSortable2 ? putSortable2.lastPutMode : void 0;
+  evt2.to = toEl || rootEl2;
+  evt2.from = fromEl || rootEl2;
+  evt2.item = targetEl || rootEl2;
+  evt2.clone = cloneEl2;
+  evt2.oldIndex = oldIndex2;
+  evt2.newIndex = newIndex2;
+  evt2.oldDraggableIndex = oldDraggableIndex2;
+  evt2.newDraggableIndex = newDraggableIndex2;
+  evt2.originalEvent = originalEvent;
+  evt2.pullMode = putSortable2 ? putSortable2.lastPutMode : void 0;
   var allEventProperties = _objectSpread2(_objectSpread2({}, extraEventProperties), PluginManager.getEventProperties(name, sortable));
   for (var option2 in allEventProperties) {
-    evt[option2] = allEventProperties[option2];
+    evt2[option2] = allEventProperties[option2];
   }
   if (rootEl2) {
-    rootEl2.dispatchEvent(evt);
+    rootEl2.dispatchEvent(evt2);
   }
   if (options[onName]) {
-    options[onName].call(sortable, evt);
+    options[onName].call(sortable, evt2);
   }
 }
 var _excluded = ["evt"];
@@ -28357,7 +28356,7 @@ var documentExists = typeof document !== "undefined", PositionGhostAbsolutely = 
   return ret;
 }, _prepareGroup = function _prepareGroup2(options) {
   function toFn(value, pull) {
-    return function(to, from, dragEl2, evt) {
+    return function(to, from, dragEl2, evt2) {
       var sameGroup = to.options.group.name && from.options.group.name && to.options.group.name === from.options.group.name;
       if (value == null && (pull || sameGroup)) {
         return true;
@@ -28366,7 +28365,7 @@ var documentExists = typeof document !== "undefined", PositionGhostAbsolutely = 
       } else if (pull && value === "clone") {
         return value;
       } else if (typeof value === "function") {
-        return toFn(value(to, from, dragEl2, evt), pull)(to, from, dragEl2, evt);
+        return toFn(value(to, from, dragEl2, evt2), pull)(to, from, dragEl2, evt2);
       } else {
         var otherGroup = (pull ? to : from).options.group.name;
         return value === true || typeof value === "string" && value === otherGroup || value.join && value.indexOf(otherGroup) > -1;
@@ -28395,25 +28394,25 @@ var documentExists = typeof document !== "undefined", PositionGhostAbsolutely = 
   }
 };
 if (documentExists && !ChromeForAndroid) {
-  document.addEventListener("click", function(evt) {
+  document.addEventListener("click", function(evt2) {
     if (ignoreNextClick) {
-      evt.preventDefault();
-      evt.stopPropagation && evt.stopPropagation();
-      evt.stopImmediatePropagation && evt.stopImmediatePropagation();
+      evt2.preventDefault();
+      evt2.stopPropagation && evt2.stopPropagation();
+      evt2.stopImmediatePropagation && evt2.stopImmediatePropagation();
       ignoreNextClick = false;
       return false;
     }
   }, true);
 }
-var nearestEmptyInsertDetectEvent = function nearestEmptyInsertDetectEvent2(evt) {
+var nearestEmptyInsertDetectEvent = function nearestEmptyInsertDetectEvent2(evt2) {
   if (dragEl) {
-    evt = evt.touches ? evt.touches[0] : evt;
-    var nearest = _detectNearestEmptySortable(evt.clientX, evt.clientY);
+    evt2 = evt2.touches ? evt2.touches[0] : evt2;
+    var nearest = _detectNearestEmptySortable(evt2.clientX, evt2.clientY);
     if (nearest) {
       var event = {};
-      for (var i in evt) {
-        if (evt.hasOwnProperty(i)) {
-          event[i] = evt[i];
+      for (var i in evt2) {
+        if (evt2.hasOwnProperty(i)) {
+          event[i] = evt2[i];
         }
       }
       event.target = event.rootEl = nearest;
@@ -28423,9 +28422,9 @@ var nearestEmptyInsertDetectEvent = function nearestEmptyInsertDetectEvent2(evt)
     }
   }
 };
-var _checkOutsideTargetEl = function _checkOutsideTargetEl2(evt) {
+var _checkOutsideTargetEl = function _checkOutsideTargetEl2(evt2) {
   if (dragEl) {
-    dragEl.parentNode[expando]._isOutsideThisEl(evt.target);
+    dragEl.parentNode[expando]._isOutsideThisEl(evt2.target);
   }
 };
 function Sortable(el, options) {
@@ -28512,18 +28511,18 @@ Sortable.prototype = {
       lastTarget = null;
     }
   },
-  _getDirection: function _getDirection(evt, target) {
-    return typeof this.options.direction === "function" ? this.options.direction.call(this, evt, target, dragEl) : this.options.direction;
+  _getDirection: function _getDirection(evt2, target) {
+    return typeof this.options.direction === "function" ? this.options.direction.call(this, evt2, target, dragEl) : this.options.direction;
   },
-  _onTapStart: function _onTapStart(evt) {
-    if (!evt.cancelable)
+  _onTapStart: function _onTapStart(evt2) {
+    if (!evt2.cancelable)
       return;
-    var _this = this, el = this.el, options = this.options, preventOnFilter = options.preventOnFilter, type = evt.type, touch = evt.touches && evt.touches[0] || evt.pointerType && evt.pointerType === "touch" && evt, target = (touch || evt).target, originalTarget = evt.target.shadowRoot && (evt.path && evt.path[0] || evt.composedPath && evt.composedPath()[0]) || target, filter = options.filter;
+    var _this = this, el = this.el, options = this.options, preventOnFilter = options.preventOnFilter, type = evt2.type, touch = evt2.touches && evt2.touches[0] || evt2.pointerType && evt2.pointerType === "touch" && evt2, target = (touch || evt2).target, originalTarget = evt2.target.shadowRoot && (evt2.path && evt2.path[0] || evt2.composedPath && evt2.composedPath()[0]) || target, filter = options.filter;
     _saveInputCheckedState(el);
     if (dragEl) {
       return;
     }
-    if (/mousedown|pointerdown/.test(type) && evt.button !== 0 || options.disabled) {
+    if (/mousedown|pointerdown/.test(type) && evt2.button !== 0 || options.disabled) {
       return;
     }
     if (originalTarget.isContentEditable) {
@@ -28542,7 +28541,7 @@ Sortable.prototype = {
     oldIndex = index(target);
     oldDraggableIndex = index(target, options.draggable);
     if (typeof filter === "function") {
-      if (filter.call(this, evt, target, this)) {
+      if (filter.call(this, evt2, target, this)) {
         _dispatchEvent({
           sortable: _this,
           rootEl: originalTarget,
@@ -28552,9 +28551,9 @@ Sortable.prototype = {
           fromEl: el
         });
         pluginEvent("filter", _this, {
-          evt
+          evt: evt2
         });
-        preventOnFilter && evt.cancelable && evt.preventDefault();
+        preventOnFilter && evt2.cancelable && evt2.preventDefault();
         return;
       }
     } else if (filter) {
@@ -28570,22 +28569,22 @@ Sortable.prototype = {
             toEl: el
           });
           pluginEvent("filter", _this, {
-            evt
+            evt: evt2
           });
           return true;
         }
       });
       if (filter) {
-        preventOnFilter && evt.cancelable && evt.preventDefault();
+        preventOnFilter && evt2.cancelable && evt2.preventDefault();
         return;
       }
     }
     if (options.handle && !closest(originalTarget, options.handle, el, false)) {
       return;
     }
-    this._prepareDragStart(evt, touch, target);
+    this._prepareDragStart(evt2, touch, target);
   },
-  _prepareDragStart: function _prepareDragStart(evt, touch, target) {
+  _prepareDragStart: function _prepareDragStart(evt2, touch, target) {
     var _this = this, el = _this.el, options = _this.options, ownerDocument = el.ownerDocument, dragStartFn;
     if (target && !dragEl && target.parentNode === el) {
       var dragRect = getRect(target);
@@ -28598,17 +28597,17 @@ Sortable.prototype = {
       Sortable.dragged = dragEl;
       tapEvt = {
         target: dragEl,
-        clientX: (touch || evt).clientX,
-        clientY: (touch || evt).clientY
+        clientX: (touch || evt2).clientX,
+        clientY: (touch || evt2).clientY
       };
       tapDistanceLeft = tapEvt.clientX - dragRect.left;
       tapDistanceTop = tapEvt.clientY - dragRect.top;
-      this._lastX = (touch || evt).clientX;
-      this._lastY = (touch || evt).clientY;
+      this._lastX = (touch || evt2).clientX;
+      this._lastY = (touch || evt2).clientY;
       dragEl.style["will-change"] = "all";
       dragStartFn = function dragStartFn2() {
         pluginEvent("delayEnded", _this, {
-          evt
+          evt: evt2
         });
         if (Sortable.eventCanceled) {
           _this._onDrop();
@@ -28618,11 +28617,11 @@ Sortable.prototype = {
         if (!FireFox && _this.nativeDraggable) {
           dragEl.draggable = true;
         }
-        _this._triggerDragStart(evt, touch);
+        _this._triggerDragStart(evt2, touch);
         _dispatchEvent({
           sortable: _this,
           name: "choose",
-          originalEvent: evt
+          originalEvent: evt2
         });
         toggleClass(dragEl, options.chosenClass, true);
       };
@@ -28640,7 +28639,7 @@ Sortable.prototype = {
         dragEl.draggable = true;
       }
       pluginEvent("delayStart", this, {
-        evt
+        evt: evt2
       });
       if (options.delay && (!options.delayOnTouchOnly || touch) && (!this.nativeDraggable || !(Edge || IE11OrLess))) {
         if (Sortable.eventCanceled) {
@@ -28679,8 +28678,8 @@ Sortable.prototype = {
     off(ownerDocument, "touchmove", this._delayedDragTouchMoveHandler);
     off(ownerDocument, "pointermove", this._delayedDragTouchMoveHandler);
   },
-  _triggerDragStart: function _triggerDragStart(evt, touch) {
-    touch = touch || evt.pointerType == "touch" && evt;
+  _triggerDragStart: function _triggerDragStart(evt2, touch) {
+    touch = touch || evt2.pointerType == "touch" && evt2;
     if (!this.nativeDraggable || touch) {
       if (this.options.supportPointer) {
         on(document, "pointermove", this._onTouchMove);
@@ -28704,11 +28703,11 @@ Sortable.prototype = {
     } catch (err) {
     }
   },
-  _dragStarted: function _dragStarted(fallback, evt) {
+  _dragStarted: function _dragStarted(fallback, evt2) {
     awaitingDragStarted = false;
     if (rootEl && dragEl) {
       pluginEvent("dragStarted", this, {
-        evt
+        evt: evt2
       });
       if (this.nativeDraggable) {
         on(document, "dragover", _checkOutsideTargetEl);
@@ -28721,7 +28720,7 @@ Sortable.prototype = {
       _dispatchEvent({
         sortable: this,
         name: "start",
-        originalEvent: evt
+        originalEvent: evt2
       });
     } else {
       this._nulling();
@@ -28761,14 +28760,14 @@ Sortable.prototype = {
       _unhideGhostForTarget();
     }
   },
-  _onTouchMove: function _onTouchMove(evt) {
+  _onTouchMove: function _onTouchMove(evt2) {
     if (tapEvt) {
-      var options = this.options, fallbackTolerance = options.fallbackTolerance, fallbackOffset = options.fallbackOffset, touch = evt.touches ? evt.touches[0] : evt, ghostMatrix = ghostEl && matrix(ghostEl, true), scaleX = ghostEl && ghostMatrix && ghostMatrix.a, scaleY = ghostEl && ghostMatrix && ghostMatrix.d, relativeScrollOffset = PositionGhostAbsolutely && ghostRelativeParent && getRelativeScrollOffset(ghostRelativeParent), dx = (touch.clientX - tapEvt.clientX + fallbackOffset.x) / (scaleX || 1) + (relativeScrollOffset ? relativeScrollOffset[0] - ghostRelativeParentInitialScroll[0] : 0) / (scaleX || 1), dy = (touch.clientY - tapEvt.clientY + fallbackOffset.y) / (scaleY || 1) + (relativeScrollOffset ? relativeScrollOffset[1] - ghostRelativeParentInitialScroll[1] : 0) / (scaleY || 1);
+      var options = this.options, fallbackTolerance = options.fallbackTolerance, fallbackOffset = options.fallbackOffset, touch = evt2.touches ? evt2.touches[0] : evt2, ghostMatrix = ghostEl && matrix(ghostEl, true), scaleX = ghostEl && ghostMatrix && ghostMatrix.a, scaleY = ghostEl && ghostMatrix && ghostMatrix.d, relativeScrollOffset = PositionGhostAbsolutely && ghostRelativeParent && getRelativeScrollOffset(ghostRelativeParent), dx = (touch.clientX - tapEvt.clientX + fallbackOffset.x) / (scaleX || 1) + (relativeScrollOffset ? relativeScrollOffset[0] - ghostRelativeParentInitialScroll[0] : 0) / (scaleX || 1), dy = (touch.clientY - tapEvt.clientY + fallbackOffset.y) / (scaleY || 1) + (relativeScrollOffset ? relativeScrollOffset[1] - ghostRelativeParentInitialScroll[1] : 0) / (scaleY || 1);
       if (!Sortable.active && !awaitingDragStarted) {
         if (fallbackTolerance && Math.max(Math.abs(touch.clientX - this._lastX), Math.abs(touch.clientY - this._lastY)) < fallbackTolerance) {
           return;
         }
-        this._onDragStart(evt, true);
+        this._onDragStart(evt2, true);
       }
       if (ghostEl) {
         if (ghostMatrix) {
@@ -28793,7 +28792,7 @@ Sortable.prototype = {
         lastDy = dy;
         touchEvt = touch;
       }
-      evt.cancelable && evt.preventDefault();
+      evt2.cancelable && evt2.preventDefault();
     }
   },
   _appendGhost: function _appendGhost() {
@@ -28835,12 +28834,12 @@ Sortable.prototype = {
       css(ghostEl, "transform-origin", tapDistanceLeft / parseInt(ghostEl.style.width) * 100 + "% " + tapDistanceTop / parseInt(ghostEl.style.height) * 100 + "%");
     }
   },
-  _onDragStart: function _onDragStart(evt, fallback) {
+  _onDragStart: function _onDragStart(evt2, fallback) {
     var _this = this;
-    var dataTransfer = evt.dataTransfer;
+    var dataTransfer = evt2.dataTransfer;
     var options = _this.options;
     pluginEvent("dragStart", this, {
-      evt
+      evt: evt2
     });
     if (Sortable.eventCanceled) {
       this._onDrop();
@@ -28885,20 +28884,20 @@ Sortable.prototype = {
       css(dragEl, "transform", "translateZ(0)");
     }
     awaitingDragStarted = true;
-    _this._dragStartId = _nextTick(_this._dragStarted.bind(_this, fallback, evt));
+    _this._dragStartId = _nextTick(_this._dragStarted.bind(_this, fallback, evt2));
     on(document, "selectstart", _this);
     moved = true;
     if (Safari) {
       css(document.body, "user-select", "none");
     }
   },
-  _onDragOver: function _onDragOver(evt) {
-    var el = this.el, target = evt.target, dragRect, targetRect, revert, options = this.options, group = options.group, activeSortable = Sortable.active, isOwner = activeGroup === group, canSort = options.sort, fromSortable = putSortable || activeSortable, vertical, _this = this, completedFired = false;
+  _onDragOver: function _onDragOver(evt2) {
+    var el = this.el, target = evt2.target, dragRect, targetRect, revert, options = this.options, group = options.group, activeSortable = Sortable.active, isOwner = activeGroup === group, canSort = options.sort, fromSortable = putSortable || activeSortable, vertical, _this = this, completedFired = false;
     if (_silent)
       return;
     function dragOverEvent(name, extra) {
       pluginEvent(name, _this, _objectSpread2({
-        evt,
+        evt: evt2,
         isOwner,
         axis: vertical ? "vertical" : "horizontal",
         revert,
@@ -28909,7 +28908,7 @@ Sortable.prototype = {
         target,
         completed,
         onMove: function onMove(target2, after2) {
-          return _onMove(rootEl, el, dragEl, dragRect, target2, getRect(target2), evt, after2);
+          return _onMove(rootEl, el, dragEl, dragRect, target2, getRect(target2), evt2, after2);
         },
         changed
       }, extra));
@@ -28955,11 +28954,11 @@ Sortable.prototype = {
       if (target === dragEl && !dragEl.animated || target === el && !target.animated) {
         lastTarget = null;
       }
-      if (!options.dragoverBubble && !evt.rootEl && target !== document) {
-        dragEl.parentNode[expando]._isOutsideThisEl(evt.target);
-        !insertion && nearestEmptyInsertDetectEvent(evt);
+      if (!options.dragoverBubble && !evt2.rootEl && target !== document) {
+        dragEl.parentNode[expando]._isOutsideThisEl(evt2.target);
+        !insertion && nearestEmptyInsertDetectEvent(evt2);
       }
-      !options.dragoverBubble && evt.stopPropagation && evt.stopPropagation();
+      !options.dragoverBubble && evt2.stopPropagation && evt2.stopPropagation();
       return completedFired = true;
     }
     function changed() {
@@ -28971,22 +28970,22 @@ Sortable.prototype = {
         toEl: el,
         newIndex,
         newDraggableIndex,
-        originalEvent: evt
+        originalEvent: evt2
       });
     }
-    if (evt.preventDefault !== void 0) {
-      evt.cancelable && evt.preventDefault();
+    if (evt2.preventDefault !== void 0) {
+      evt2.cancelable && evt2.preventDefault();
     }
     target = closest(target, options.draggable, el, true);
     dragOverEvent("dragOver");
     if (Sortable.eventCanceled)
       return completedFired;
-    if (dragEl.contains(evt.target) || target.animated && target.animatingX && target.animatingY || _this._ignoreWhileAnimating === target) {
+    if (dragEl.contains(evt2.target) || target.animated && target.animatingX && target.animatingY || _this._ignoreWhileAnimating === target) {
       return completed(false);
     }
     ignoreNextClick = false;
-    if (activeSortable && !options.disabled && (isOwner ? canSort || (revert = parentEl !== rootEl) : putSortable === this || (this.lastPutMode = activeGroup.checkPull(this, activeSortable, dragEl, evt)) && group.checkPut(this, activeSortable, dragEl, evt))) {
-      vertical = this._getDirection(evt, target) === "vertical";
+    if (activeSortable && !options.disabled && (isOwner ? canSort || (revert = parentEl !== rootEl) : putSortable === this || (this.lastPutMode = activeGroup.checkPull(this, activeSortable, dragEl, evt2)) && group.checkPut(this, activeSortable, dragEl, evt2))) {
+      vertical = this._getDirection(evt2, target) === "vertical";
       dragRect = getRect(dragEl);
       dragOverEvent("dragOverValid");
       if (Sortable.eventCanceled)
@@ -29006,17 +29005,17 @@ Sortable.prototype = {
         return completed(true);
       }
       var elLastChild = lastChild(el, options.draggable);
-      if (!elLastChild || _ghostIsLast(evt, vertical, this) && !elLastChild.animated) {
+      if (!elLastChild || _ghostIsLast(evt2, vertical, this) && !elLastChild.animated) {
         if (elLastChild === dragEl) {
           return completed(false);
         }
-        if (elLastChild && el === evt.target) {
+        if (elLastChild && el === evt2.target) {
           target = elLastChild;
         }
         if (target) {
           targetRect = getRect(target);
         }
-        if (_onMove(rootEl, el, dragEl, dragRect, target, targetRect, evt, !!target) !== false) {
+        if (_onMove(rootEl, el, dragEl, dragRect, target, targetRect, evt2, !!target) !== false) {
           capture();
           if (elLastChild && elLastChild.nextSibling) {
             el.insertBefore(dragEl, elLastChild.nextSibling);
@@ -29027,14 +29026,14 @@ Sortable.prototype = {
           changed();
           return completed(true);
         }
-      } else if (elLastChild && _ghostIsFirst(evt, vertical, this)) {
+      } else if (elLastChild && _ghostIsFirst(evt2, vertical, this)) {
         var firstChild = getChild(el, 0, options, true);
         if (firstChild === dragEl) {
           return completed(false);
         }
         target = firstChild;
         targetRect = getRect(target);
-        if (_onMove(rootEl, el, dragEl, dragRect, target, targetRect, evt, false) !== false) {
+        if (_onMove(rootEl, el, dragEl, dragRect, target, targetRect, evt2, false) !== false) {
           capture();
           el.insertBefore(dragEl, firstChild);
           parentEl = el;
@@ -29049,7 +29048,7 @@ Sortable.prototype = {
           pastFirstInvertThresh = false;
           isCircumstantialInvert = !differentRowCol && options.invertSwap || differentLevel;
         }
-        direction = _getSwapDirection(evt, target, targetRect, vertical, differentRowCol ? 1 : options.swapThreshold, options.invertedSwapThreshold == null ? options.swapThreshold : options.invertedSwapThreshold, isCircumstantialInvert, lastTarget === target);
+        direction = _getSwapDirection(evt2, target, targetRect, vertical, differentRowCol ? 1 : options.swapThreshold, options.invertedSwapThreshold == null ? options.swapThreshold : options.invertedSwapThreshold, isCircumstantialInvert, lastTarget === target);
         var sibling;
         if (direction !== 0) {
           var dragIndex = index(dragEl);
@@ -29065,7 +29064,7 @@ Sortable.prototype = {
         lastDirection = direction;
         var nextSibling = target.nextElementSibling, after = false;
         after = direction === 1;
-        var moveVector = _onMove(rootEl, el, dragEl, dragRect, target, targetRect, evt, after);
+        var moveVector = _onMove(rootEl, el, dragEl, dragRect, target, targetRect, evt2, after);
         if (moveVector !== false) {
           if (moveVector === 1 || moveVector === -1) {
             after = moveVector === 1;
@@ -29112,12 +29111,12 @@ Sortable.prototype = {
     off(ownerDocument, "touchcancel", this._onDrop);
     off(document, "selectstart", this);
   },
-  _onDrop: function _onDrop(evt) {
+  _onDrop: function _onDrop(evt2) {
     var el = this.el, options = this.options;
     newIndex = index(dragEl);
     newDraggableIndex = index(dragEl, options.draggable);
     pluginEvent("drop", this, {
-      evt
+      evt: evt2
     });
     parentEl = dragEl && dragEl.parentNode;
     newIndex = index(dragEl);
@@ -29143,10 +29142,10 @@ Sortable.prototype = {
       css(document.body, "user-select", "");
     }
     css(dragEl, "transform", "");
-    if (evt) {
+    if (evt2) {
       if (moved) {
-        evt.cancelable && evt.preventDefault();
-        !options.dropBubble && evt.stopPropagation();
+        evt2.cancelable && evt2.preventDefault();
+        !options.dropBubble && evt2.stopPropagation();
       }
       ghostEl && ghostEl.parentNode && ghostEl.parentNode.removeChild(ghostEl);
       if (rootEl === parentEl || putSortable && putSortable.lastPutMode !== "clone") {
@@ -29168,7 +29167,7 @@ Sortable.prototype = {
           toEl: parentEl,
           newIndex: null,
           newDraggableIndex: null,
-          originalEvent: evt
+          originalEvent: evt2
         });
         if (rootEl !== parentEl) {
           if (newIndex >= 0) {
@@ -29177,26 +29176,26 @@ Sortable.prototype = {
               name: "add",
               toEl: parentEl,
               fromEl: rootEl,
-              originalEvent: evt
+              originalEvent: evt2
             });
             _dispatchEvent({
               sortable: this,
               name: "remove",
               toEl: parentEl,
-              originalEvent: evt
+              originalEvent: evt2
             });
             _dispatchEvent({
               rootEl: parentEl,
               name: "sort",
               toEl: parentEl,
               fromEl: rootEl,
-              originalEvent: evt
+              originalEvent: evt2
             });
             _dispatchEvent({
               sortable: this,
               name: "sort",
               toEl: parentEl,
-              originalEvent: evt
+              originalEvent: evt2
             });
           }
           putSortable && putSortable.save();
@@ -29207,13 +29206,13 @@ Sortable.prototype = {
                 sortable: this,
                 name: "update",
                 toEl: parentEl,
-                originalEvent: evt
+                originalEvent: evt2
               });
               _dispatchEvent({
                 sortable: this,
                 name: "sort",
                 toEl: parentEl,
-                originalEvent: evt
+                originalEvent: evt2
               });
             }
           }
@@ -29227,7 +29226,7 @@ Sortable.prototype = {
             sortable: this,
             name: "end",
             toEl: parentEl,
-            originalEvent: evt
+            originalEvent: evt2
           });
           this.save();
         }
@@ -29243,21 +29242,21 @@ Sortable.prototype = {
     });
     savedInputChecked.length = lastDx = lastDy = 0;
   },
-  handleEvent: function handleEvent(evt) {
-    switch (evt.type) {
+  handleEvent: function handleEvent(evt2) {
+    switch (evt2.type) {
       case "drop":
       case "dragend":
-        this._onDrop(evt);
+        this._onDrop(evt2);
         break;
       case "dragenter":
       case "dragover":
         if (dragEl) {
-          this._onDragOver(evt);
-          _globalDragOver(evt);
+          this._onDragOver(evt2);
+          _globalDragOver(evt2);
         }
         break;
       case "selectstart":
-        evt.preventDefault();
+        evt2.preventDefault();
         break;
     }
   },
@@ -29366,34 +29365,34 @@ Sortable.prototype = {
     }
   }
 };
-function _globalDragOver(evt) {
-  if (evt.dataTransfer) {
-    evt.dataTransfer.dropEffect = "move";
+function _globalDragOver(evt2) {
+  if (evt2.dataTransfer) {
+    evt2.dataTransfer.dropEffect = "move";
   }
-  evt.cancelable && evt.preventDefault();
+  evt2.cancelable && evt2.preventDefault();
 }
 function _onMove(fromEl, toEl, dragEl2, dragRect, targetEl, targetRect, originalEvent, willInsertAfter) {
-  var evt, sortable = fromEl[expando], onMoveFn = sortable.options.onMove, retVal;
+  var evt2, sortable = fromEl[expando], onMoveFn = sortable.options.onMove, retVal;
   if (window.CustomEvent && !IE11OrLess && !Edge) {
-    evt = new CustomEvent("move", {
+    evt2 = new CustomEvent("move", {
       bubbles: true,
       cancelable: true
     });
   } else {
-    evt = document.createEvent("Event");
-    evt.initEvent("move", true, true);
+    evt2 = document.createEvent("Event");
+    evt2.initEvent("move", true, true);
   }
-  evt.to = toEl;
-  evt.from = fromEl;
-  evt.dragged = dragEl2;
-  evt.draggedRect = dragRect;
-  evt.related = targetEl || toEl;
-  evt.relatedRect = targetRect || getRect(toEl);
-  evt.willInsertAfter = willInsertAfter;
-  evt.originalEvent = originalEvent;
-  fromEl.dispatchEvent(evt);
+  evt2.to = toEl;
+  evt2.from = fromEl;
+  evt2.dragged = dragEl2;
+  evt2.draggedRect = dragRect;
+  evt2.related = targetEl || toEl;
+  evt2.relatedRect = targetRect || getRect(toEl);
+  evt2.willInsertAfter = willInsertAfter;
+  evt2.originalEvent = originalEvent;
+  fromEl.dispatchEvent(evt2);
   if (onMoveFn) {
-    retVal = onMoveFn.call(sortable, evt, originalEvent);
+    retVal = onMoveFn.call(sortable, evt2, originalEvent);
   }
   return retVal;
 }
@@ -29403,18 +29402,18 @@ function _disableDraggable(el) {
 function _unsilent() {
   _silent = false;
 }
-function _ghostIsFirst(evt, vertical, sortable) {
+function _ghostIsFirst(evt2, vertical, sortable) {
   var rect = getRect(getChild(sortable.el, 0, sortable.options, true));
   var spacer = 10;
-  return vertical ? evt.clientX < rect.left - spacer || evt.clientY < rect.top && evt.clientX < rect.right : evt.clientY < rect.top - spacer || evt.clientY < rect.bottom && evt.clientX < rect.left;
+  return vertical ? evt2.clientX < rect.left - spacer || evt2.clientY < rect.top && evt2.clientX < rect.right : evt2.clientY < rect.top - spacer || evt2.clientY < rect.bottom && evt2.clientX < rect.left;
 }
-function _ghostIsLast(evt, vertical, sortable) {
+function _ghostIsLast(evt2, vertical, sortable) {
   var rect = getRect(lastChild(sortable.el, sortable.options.draggable));
   var spacer = 10;
-  return vertical ? evt.clientX > rect.right + spacer || evt.clientX <= rect.right && evt.clientY > rect.bottom && evt.clientX >= rect.left : evt.clientX > rect.right && evt.clientY > rect.top || evt.clientX <= rect.right && evt.clientY > rect.bottom + spacer;
+  return vertical ? evt2.clientX > rect.right + spacer || evt2.clientX <= rect.right && evt2.clientY > rect.bottom && evt2.clientX >= rect.left : evt2.clientX > rect.right && evt2.clientY > rect.top || evt2.clientX <= rect.right && evt2.clientY > rect.bottom + spacer;
 }
-function _getSwapDirection(evt, target, targetRect, vertical, swapThreshold, invertedSwapThreshold, invertSwap, isLastTarget) {
-  var mouseOnAxis = vertical ? evt.clientY : evt.clientX, targetLength = vertical ? targetRect.height : targetRect.width, targetS1 = vertical ? targetRect.top : targetRect.left, targetS2 = vertical ? targetRect.bottom : targetRect.right, invert = false;
+function _getSwapDirection(evt2, target, targetRect, vertical, swapThreshold, invertedSwapThreshold, invertSwap, isLastTarget) {
+  var mouseOnAxis = vertical ? evt2.clientY : evt2.clientX, targetLength = vertical ? targetRect.height : targetRect.width, targetS1 = vertical ? targetRect.top : targetRect.left, targetS2 = vertical ? targetRect.bottom : targetRect.right, invert = false;
   if (!invertSwap) {
     if (isLastTarget && targetMoveDistance < targetLength * swapThreshold) {
       if (!pastFirstInvertThresh && (lastDirection === 1 ? mouseOnAxis > targetS1 + targetLength * invertedSwapThreshold / 2 : mouseOnAxis < targetS2 - targetLength * invertedSwapThreshold / 2)) {
@@ -29471,9 +29470,9 @@ function _cancelNextTick(id) {
   return clearTimeout(id);
 }
 if (documentExists) {
-  on(document, "touchmove", function(evt) {
-    if ((Sortable.active || awaitingDragStarted) && evt.cancelable) {
-      evt.preventDefault();
+  on(document, "touchmove", function(evt2) {
+    if ((Sortable.active || awaitingDragStarted) && evt2.cancelable) {
+      evt2.preventDefault();
     }
   });
 }
@@ -29571,15 +29570,15 @@ function AutoScrollPlugin() {
       touchEvt$1 = scrollRootEl = scrollEl = scrolling = pointerElemChangedInterval = lastAutoScrollX = lastAutoScrollY = null;
       autoScrolls.length = 0;
     },
-    _handleFallbackAutoScroll: function _handleFallbackAutoScroll(evt) {
-      this._handleAutoScroll(evt, true);
+    _handleFallbackAutoScroll: function _handleFallbackAutoScroll(evt2) {
+      this._handleAutoScroll(evt2, true);
     },
-    _handleAutoScroll: function _handleAutoScroll(evt, fallback) {
+    _handleAutoScroll: function _handleAutoScroll(evt2, fallback) {
       var _this = this;
-      var x = (evt.touches ? evt.touches[0] : evt).clientX, y = (evt.touches ? evt.touches[0] : evt).clientY, elem = document.elementFromPoint(x, y);
-      touchEvt$1 = evt;
+      var x = (evt2.touches ? evt2.touches[0] : evt2).clientX, y = (evt2.touches ? evt2.touches[0] : evt2).clientY, elem = document.elementFromPoint(x, y);
+      touchEvt$1 = evt2;
       if (fallback || this.options.forceAutoScrollFallback || Edge || IE11OrLess || Safari) {
-        autoScroll(evt, this.options, elem, fallback);
+        autoScroll(evt2, this.options, elem, fallback);
         var ogElemScroller = getParentAutoScrollElement(elem, true);
         if (scrolling && (!pointerElemChangedInterval || x !== lastAutoScrollX || y !== lastAutoScrollY)) {
           pointerElemChangedInterval && clearPointerElemChangedInterval();
@@ -29589,7 +29588,7 @@ function AutoScrollPlugin() {
               ogElemScroller = newElem;
               clearAutoScrolls();
             }
-            autoScroll(evt, _this.options, newElem, fallback);
+            autoScroll(evt2, _this.options, newElem, fallback);
           }, 10);
           lastAutoScrollX = x;
           lastAutoScrollY = y;
@@ -29599,7 +29598,7 @@ function AutoScrollPlugin() {
           clearAutoScrolls();
           return;
         }
-        autoScroll(evt, this.options, getParentAutoScrollElement(elem, false), false);
+        autoScroll(evt2, this.options, getParentAutoScrollElement(elem, false), false);
       }
     }
   };
@@ -29617,10 +29616,10 @@ function clearAutoScrolls() {
 function clearPointerElemChangedInterval() {
   clearInterval(pointerElemChangedInterval);
 }
-var autoScroll = throttle(function(evt, options, rootEl2, isFallback) {
+var autoScroll = throttle(function(evt2, options, rootEl2, isFallback) {
   if (!options.scroll)
     return;
-  var x = (evt.touches ? evt.touches[0] : evt).clientX, y = (evt.touches ? evt.touches[0] : evt).clientY, sens = options.scrollSensitivity, speed = options.scrollSpeed, winScroller = getWindowScrollingElement();
+  var x = (evt2.touches ? evt2.touches[0] : evt2).clientX, y = (evt2.touches ? evt2.touches[0] : evt2).clientY, sens = options.scrollSensitivity, speed = options.scrollSpeed, winScroller = getWindowScrollingElement();
   var scrollThisInstance = false, scrollCustomFn;
   if (scrollRootEl !== rootEl2) {
     scrollRootEl = rootEl2;
@@ -29665,7 +29664,7 @@ var autoScroll = throttle(function(evt, options, rootEl2, isFallback) {
           var scrollOffsetY = autoScrolls[this.layer].vy ? autoScrolls[this.layer].vy * speed : 0;
           var scrollOffsetX = autoScrolls[this.layer].vx ? autoScrolls[this.layer].vx * speed : 0;
           if (typeof scrollCustomFn === "function") {
-            if (scrollCustomFn.call(Sortable.dragged.parentNode[expando], scrollOffsetX, scrollOffsetY, evt, touchEvt$1, autoScrolls[this.layer].el) !== "continue") {
+            if (scrollCustomFn.call(Sortable.dragged.parentNode[expando], scrollOffsetX, scrollOffsetY, evt2, touchEvt$1, autoScrolls[this.layer].el) !== "continue") {
               return;
             }
           }
@@ -29944,6 +29943,9 @@ __sfc_main.setup = (__props, __ctx) => {
   }, {
     deep: true
   });
+  const setContent = (bullets2) => {
+    state.bullets = bullets2;
+  };
   const onTextChanged = (bullet) => {
     const {
       id
@@ -30008,7 +30010,8 @@ __sfc_main.setup = (__props, __ctx) => {
             state.currentElement = null;
           }
         },
-        onEnd: () => {
+        onEnd: (ent) => {
+          console.log(evt);
         }
       });
     }
@@ -30111,6 +30114,7 @@ __sfc_main.setup = (__props, __ctx) => {
     state.bulletDisplayType = BULLET_DISPLAY_TYPES.bullet;
     addNewBullet();
   };
+  console.log("started");
   return Object.assign({
     state,
     canAddBullets,
@@ -30134,7 +30138,8 @@ __sfc_main.setup = (__props, __ctx) => {
     setTitleContent,
     blurBullet,
     focusBullet,
-    clearBullet
+    clearBullet,
+    setContent
   });
 };
 __sfc_main.components = Object.assign({

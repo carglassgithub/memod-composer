@@ -41,3 +41,12 @@ export const getLastInsertedChar = (delta) => {
   }
   return lastOp.insert && lastOp.insert.slice && lastOp.insert.slice(-1)
 }
+
+export const getLastDeltaOp = (delta) => {
+  if (!delta || !delta.ops || delta.ops.length == 0) return
+  const lastIndex = delta.ops.length - 1;
+  const localDelta = delta.ops[lastIndex];
+  const newDelta = {...delta}
+  newDelta.ops = delta.ops.slice(0, lastIndex)
+  return localDelta.insert !== '\n' ? localDelta : getLastDeltaOp(newDelta)
+}
