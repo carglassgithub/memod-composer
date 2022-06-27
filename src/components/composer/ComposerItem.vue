@@ -318,7 +318,8 @@ function getLastWord(editor, length, sliceStart = 1) {
 }
 
 const charCount = computed(() => {
-  return props.bullet?.rawText?.length ?? 0
+  const count = props.bullet?.rawText?.length
+  return count === 0 ? count : count - 1
 })
 
 function handleMatchedLinks(word, delta, isClickOutside) {
