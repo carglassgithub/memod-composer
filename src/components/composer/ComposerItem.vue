@@ -15,8 +15,7 @@
             <span
               v-else
               class="bullet-indicator indicator-number"
-              :data-active="isFocused ? 'true' : 'false'"
-              >
+              :data-active="isFocused ? 'true' : 'false'">
               {{ index + 1 }}
             </span>
           </div>
@@ -55,7 +54,7 @@ import IconClose from '../icons/IconClose.vue'
 import IconOrder from '../icons/IconOrder.vue'
 import { emitCurrentSelectionAndFormat } from '../../utils/emitters'
 import { resizerConfig } from '../../config/index'
-import { BULLET_DISPLAY_TYPES, composerConstants } from "../../utils/constants"
+import { BULLET_DISPLAY_TYPES, composerConstants } from '../../utils/constants'
 
 let EVENT_WORD_INDEX = 0
 // eslint-disable-next-line no-unused-vars
@@ -131,7 +130,10 @@ onMounted(() => {
       mention: {
         mentionDenotationChars: ['@'],
         async source(searchTerm, renderList, mentionChar) {
-          const matchedResults = await suggestionQuerySearch(searchTerm, mentionChar)
+          const matchedResults = await suggestionQuerySearch(
+            searchTerm,
+            mentionChar
+          )
           renderList(matchedResults, searchTerm)
         },
         renderItem(item) {
@@ -142,7 +144,7 @@ onMounted(() => {
             <span>
               ${item.value}
             </span>
-          </div>`;
+          </div>`
         },
         keyboard: {
           bindings: {
@@ -153,15 +155,16 @@ onMounted(() => {
         }
       },
       autoformat: {
-          link: {
-            trigger: /\s|\n|\t/,
-            find: COMPOSER_URL_REGEX,
-            transform: function (value, protocol) { // value == match[0], noProtocol == match[1]
-              const urlValue = value.includes('http') ? value : `https://${value}`;
-              return urlValue;
-            },
-            insert: 'custom-hyperlink'
-          }
+        link: {
+          trigger: /\s|\n|\t/,
+          find: COMPOSER_URL_REGEX,
+          transform: function (value, protocol) {
+            // value == match[0], noProtocol == match[1]
+            const urlValue = value.includes('http') ? value : `https://${value}`
+            return urlValue
+          },
+          insert: 'custom-hyperlink'
+        }
       },
       keyboard: {
         bindings: {
@@ -183,16 +186,15 @@ onMounted(() => {
     }
   })
   state.editor.on(Quill.events.TEXT_CHANGE, (delta) => {
-
     if (state.editor.getLength() > CHAR_LIMIT) {
-      state.editor.deleteText(CHAR_LIMIT, state.editor.getLength());
+      state.editor.deleteText(CHAR_LIMIT, state.editor.getLength())
     }
-    
+
     const char = getLastInsertedChar(delta)
     if ([' ', '\n'].includes(char)) {
       setTimeout(() => {
-          state.editor.setSelection(delta.ops[0].retain + 1, 0, 'silent');
-      });
+        state.editor.setSelection(delta.ops[0].retain + 1, 0, 'silent')
+      })
     }
     emitTextChanges()
     nextTick(() => {
@@ -209,37 +211,39 @@ onMounted(() => {
   if (props.bullet.prettyText) {
     state.editor.root.innerHTML = props.bullet.prettyText.trim()
   }
-  
-  let Delta = Quill.import('delta');
+
+  let Delta = Quill.import('delta')
   state.editor.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
-      return delta.compose(new Delta().retain(delta.length()));
+    return delta.compose(new Delta().retain(delta.length()))
   })
 
   state.editor.root.addEventListener('paste', (evt) => {
-    const { clipboardData: cData, target } = evt;
-    const clipboardData = cData || window.clipboardData;
-    const pastedText = clipboardData.getData('text') || '';
-    const match = pastedText.match(COMPOSER_URL_REGEX);
+    const { clipboardData: cData, target } = evt
+    const clipboardData = cData || window.clipboardData
+    const pastedText = clipboardData.getData('text') || ''
+    const match = pastedText.match(COMPOSER_URL_REGEX)
 
     if (!target.dataset.link) {
       if (match) {
-      if (match && pastedText.length == match[0].length) {
-        const urls = [... new Set(match)];
-        urls.forEach((url, i) => {
-          let { index, length } = state.editor.getSelection(true) || { index: 0 };
-          state.editor.deleteText(index - url.length, url.length + i)
-          state.editor.setSelection(state.editor.getLength(), 0, 'user')
-          setTimeout(() => {
-            state.editor.setSelection(index - url.length, url.length, 'user')
-            actions.insertLink(url);
-            state.editor.setSelection(index, 0, 'user')
-          }, 100);
-        });
+        if (match && pastedText.length == match[0].length) {
+          const urls = [...new Set(match)]
+          urls.forEach((url, i) => {
+            let { index, length } = state.editor.getSelection(true) || {
+              index: 0
+            }
+            state.editor.deleteText(index - url.length, url.length + i)
+            state.editor.setSelection(state.editor.getLength(), 0, 'user')
+            setTimeout(() => {
+              state.editor.setSelection(index - url.length, url.length, 'user')
+              actions.insertLink(url)
+              state.editor.setSelection(index, 0, 'user')
+            }, 100)
+          })
+        }
+        setTimeout(() => {
+          state.editor.setSelection(state.editor.getLength() + 1, 0, 'user')
+        })
       }
-      setTimeout(() => {
-        state.editor.setSelection(state.editor.getLength() + 1, 0, 'user')
-      })
-    }
     }
   })
   eventHub.on(`bullet:${props.bullet.id}`, (actionName, params) => {
@@ -251,13 +255,13 @@ const emitTextChanges = () => {
   try {
     state.text = state.editor.getText()
     state.html = state.editor.root.innerHTML
-  
+
     emit('text-changed', {
       text: state.text,
       html: state.html,
       id: props.bullet.id
     })
-  } catch(e) {
+  } catch (e) {
     console.log(e)
   }
 }
@@ -314,7 +318,8 @@ function getLastWord(editor, length, sliceStart = 1) {
 }
 
 const charCount = computed(() => {
-  return props.bullet?.rawText?.length ?? 0
+  const count = props.bullet?.rawText?.length
+  return count === 0 ? count : count - 1
 })
 
 function handleMatchedLinks(word, delta, isClickOutside) {
@@ -360,30 +365,29 @@ function updateLink(editor, index, value) {
   editor.insertEmbed(index, 'custom-hyperlink', urlValue, 'silent')
 }
 
-
 function getCurrentSelectionFormats() {
   return state.editor.getFormat()
 }
 
 function formatText(format) {
   const formats = getCurrentSelectionFormats()
-  const value = formats[format];
-  state.editor.format(format, !value);
+  const value = formats[format]
+  state.editor.format(format, !value)
   emit('selection-format', getCurrentSelectionFormats())
 }
 
 function quoteBullet() {
-    const element = editorRef.value.$el.querySelector('.ql-editor');
-    const style = 'code';
-    
-    state.editor.setSelection(0, state.editor.getLength(), 'silent')
-    if (Array.from(element.classList).includes('quoted-bullet')) {
-      element.classList.remove('quoted-bullet');
-      formatText(style, false);
-    } else {
-      element.classList.add('quoted-bullet');
-      formatText(style)
-    }
+  const element = editorRef.value.$el.querySelector('.ql-editor')
+  const style = 'code'
+
+  state.editor.setSelection(0, state.editor.getLength(), 'silent')
+  if (Array.from(element.classList).includes('quoted-bullet')) {
+    element.classList.remove('quoted-bullet')
+    formatText(style, false)
+  } else {
+    element.classList.add('quoted-bullet')
+    formatText(style)
+  }
   state.editor.setSelection(state.editor.getLength())
 }
 
@@ -424,14 +428,17 @@ const actions = {
     state.editor.insertText(state.editor.getLength(), ' ')
   },
   insertLink(url) {
-    state.editor.insertEmbed(state.currentSelection || 0, 'memod-link', {value: url, callback: emitTextChanges } )
-  state.editor.insertText(state.editor.getLength(), ' ')
+    state.editor.insertEmbed(state.currentSelection || 0, 'memod-link', {
+      value: url,
+      callback: emitTextChanges
+    })
+    state.editor.insertText(state.editor.getLength(), ' ')
   },
   insertMention(user) {
     state.editor.insertEmbed(state.currentSelection, 'mention', user)
   },
   formatSelection(format) {
-    if (format === 'code') { 
+    if (format === 'code') {
       quoteBullet() // crear esto
     } else {
       formatText(format)
@@ -439,7 +446,7 @@ const actions = {
   },
   blur() {
     editorRef.value?.blur()
-  },
+  }
 }
 
 const execAction = ({ name: actionName, params }) => {
@@ -480,11 +487,11 @@ defineExpose({
     &::-webkit-scrollbar {
       width: 4px;
     }
-    
+
     &::-webkit-scrollbar-track {
       background: #2c2c2e;
     }
-    
+
     &::-webkit-scrollbar-thumb {
       background-color: #05a88f;
     }
@@ -516,5 +523,4 @@ defineExpose({
     }
   }
 }
-
 </style>

@@ -8,26 +8,30 @@
         class="text-box title"
         type="text"
         placeholder="Your amazing title"
-        maxlength="100" 
-      />
+        maxlength="100" />
     </div>
     <div ref="mainList" class="space-y-8 main-list">
-      <draggable v-model="state.bullets" group="bullets" handle=".bullet-order" @start="drag=true" @end="drag=false">
-          <composer-item
-            v-for="(bullet, index) in state.bullets"
-            :key="`${bullet.id}-${index}`"
-            :index="index"
-            :bullet="bullet"
-            :show-remove="Boolean(state.bullets.length > 1)"
-            :suggestions="state.suggestions"
-            :display-type="bulletDisplayType"
-            :is-focused="bullet.focus"
-            @text-changed="onTextChanged"
-            @suggestion-query="handleSuggestionQuery"
-            @removed="handleRemove"
-            @selection-updated="handleSelectionUpdated"
-            @blur="handleBlur"
-            @focus="focusBullet(bullet.id)" />
+      <draggable
+        v-model="state.bullets"
+        group="bullets"
+        handle=".bullet-order"
+        @start="drag = true"
+        @end="drag = false">
+        <composer-item
+          v-for="(bullet, index) in state.bullets"
+          :key="`${bullet.id}-${index}`"
+          :index="index"
+          :bullet="bullet"
+          :show-remove="Boolean(state.bullets.length > 1)"
+          :suggestions="state.suggestions"
+          :display-type="bulletDisplayType"
+          :is-focused="bullet.focus"
+          @text-changed="onTextChanged"
+          @suggestion-query="handleSuggestionQuery"
+          @removed="handleRemove"
+          @selection-updated="handleSelectionUpdated"
+          @blur="handleBlur"
+          @focus="focusBullet(bullet.id)" />
       </draggable>
     </div>
     <button
@@ -36,9 +40,7 @@
       type="button"
       @click="addBullet({}, true)">
       <IconPlus alt="Add new bullet" />
-      <span class="ml-3 block">
-        Add New Bullet
-      </span>
+      <span class="ml-3 block"> Add New Bullet </span>
     </button>
   </div>
 </template>
@@ -66,7 +68,7 @@ import { useBulletsEditor } from '../../utils/useBulletsEditor'
 import { toRefs } from '@vue/composition-api'
 import { MAX_BULLET_LENGTH, BULLET_DISPLAY_TYPES } from '../../utils/constants'
 import draggable from 'vuedraggable'
-import { v4 } from "uuid";
+import { v4 } from 'uuid'
 const props = defineProps({
   title: {
     type: String,
@@ -82,9 +84,9 @@ const props = defineProps({
   },
   bulletDisplayType: {
     type: String,
-    validator: value => Object.values(BULLET_DISPLAY_TYPES).includes(value),
+    validator: (value) => Object.values(BULLET_DISPLAY_TYPES).includes(value),
     default: BULLET_DISPLAY_TYPES.bullet
-  },
+  }
 })
 
 provide('suggestionQuerySearch', props.suggestionQuerySearch)
@@ -111,11 +113,13 @@ provide('eventHub', eventHub)
 const canAddBullets = computed(() => state.bullets.length < MAX_BULLET_LENGTH)
 
 const setContent = (bullets) => {
-  const localbullets = JSON.parse(JSON.stringify(bullets));
-  state.bullets = ref(localbullets.map(item => {
-    item.id = item.id || 'new_'+ v4() 
-    return item
-  }));
+  const localbullets = JSON.parse(JSON.stringify(bullets))
+  state.bullets = ref(
+    localbullets.map((item) => {
+      item.id = item.id || 'new_' + v4()
+      return item
+    })
+  )
 }
 
 watch(
@@ -125,7 +129,7 @@ watch(
       state.title = newValue
     }
   },
-  { immediate: true}
+  { immediate: true }
 )
 
 watch(
@@ -133,17 +137,22 @@ watch(
   (newValue, oldValue) => {
     emit('title-updated', state.title)
   },
-  { immediate: true}
+  { immediate: true }
 )
 
 watch(
   () => [...props.value],
   (newValue, oldValue) => {
-    if (newValue.length !== oldValue.length || newValue.some((bullet, index) => bullet.prettyText !== oldValue[index].prettyText)) {
+    if (
+      newValue.length !== oldValue.length ||
+      newValue.some(
+        (bullet, index) => bullet.prettyText !== oldValue[index].prettyText
+      )
+    ) {
       setContent(newValue)
     }
   },
-  { immediate: true , deep: true}
+  { immediate: true, deep: true }
 )
 
 watch(
@@ -192,7 +201,8 @@ const addBullet = (bullet, focus = true) => {
         editorId,
         prettyText,
         focus: false,
-        last_focus: 0
+        last_focus: 0,
+        rawText: ''
       }
     ]
 
@@ -210,9 +220,7 @@ const addBullet = (bullet, focus = true) => {
 }
 
 const mainList = ref(null)
-const loadSortable = () => {
-  
-}
+const loadSortable = () => {}
 
 const formatText = (format) => {}
 
@@ -271,7 +279,7 @@ const formatSelection = (format) => {
 }
 
 const insertImages = (images) => {
-  const lastBullet = focusLastBullet(state.bullets) 
+  const lastBullet = focusLastBullet(state.bullets)
   bulletAction(lastBullet?.id, 'insertImages', images)
 }
 
@@ -312,7 +320,7 @@ const blurBullet = () => {
 const focusBullet = (bulletId, selection) => {
   const bulletIndex = state.bullets.findIndex((item) => item.id === bulletId)
   if (bulletIndex !== -1) {
-    state.bullets = state.bullets.map(bullet => {
+    state.bullets = state.bullets.map((bullet) => {
       if (bullet.id == bulletId) {
         bullet.focus = true
         bullet.last_focus = Date.now()
@@ -322,7 +330,7 @@ const focusBullet = (bulletId, selection) => {
       } else {
         bullet.focus = false
       }
-      return bullet;
+      return bullet
     })
   }
 }
@@ -335,17 +343,17 @@ const clearBullet = () => {
 }
 
 defineExpose({
-  addNewBullet, 
-  insertText, 
+  addNewBullet,
+  insertText,
   insertImages,
-  insertMemoLink, 
-  insertLink, 
-  insertMention, 
-  formatSelection, 
-  setTitleContent, 
-  blurBullet, 
-  focusBullet, 
-  clearBullet, 
+  insertMemoLink,
+  insertLink,
+  insertMention,
+  formatSelection,
+  setTitleContent,
+  blurBullet,
+  focusBullet,
+  clearBullet,
   setContent
 })
 </script>
