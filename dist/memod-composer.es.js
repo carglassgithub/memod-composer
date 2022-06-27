@@ -27502,8 +27502,9 @@ __sfc_main$1.setup = (__props, __ctx) => {
     return editor.getText(EVENT_WORD_INDEX + sliceStart, length).trim();
   }
   const charCount = computed(() => {
-    var _a, _b, _c;
-    return (_c = (_b = (_a = props.bullet) == null ? void 0 : _a.rawText) == null ? void 0 : _b.length) != null ? _c : 0;
+    var _a, _b;
+    const count = (_b = (_a = props.bullet) == null ? void 0 : _a.rawText) == null ? void 0 : _b.length;
+    return count === 0 ? count : count - 1;
   });
   function handleMatchedLinks(word, delta, isClickOutside) {
     const editor = toRaw(state.editor);
@@ -34564,7 +34565,8 @@ __sfc_main.setup = (__props, __ctx) => {
         editorId,
         prettyText,
         focus: false,
-        last_focus: 0
+        last_focus: 0,
+        rawText: ""
       })];
       removeOtherFocused(editorId);
       state.currentElement = document.querySelector(`.${editorId}`);
